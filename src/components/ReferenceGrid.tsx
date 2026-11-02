@@ -21,7 +21,14 @@ export function ReferenceGrid({ figura, cell = 36, showLabels = true, className 
     <svg
       viewBox={`0 0 ${w} ${h}`}
       className={className}
-      style={{ background: "white", border: "3px solid #111", borderRadius: 6 }}
+      style={{
+        background: "white",
+        border: "3px solid #111",
+        borderRadius: 6,
+        width: w,
+        height: "auto",
+        maxWidth: "100%",
+      }}
     >
       {/* grid lines */}
       {Array.from({ length: cols + 1 }).map((_, i) => (
