@@ -4,6 +4,12 @@
 export type Vertex = [number, number];
 export type Segmento = [Vertex, Vertex];
 
+export interface Circulo {
+  id: string;
+  centro: Vertex;
+  raio: number;
+}
+
 export type Modo = "reduzir" | "ampliar";
 
 export interface Figura {
@@ -14,10 +20,9 @@ export interface Figura {
   segmentos: Segmento[];
   // modo da atividade: "reduzir" (modelo exibido maior que a malha de desenho)
   // ou "ampliar" (modelo exibido menor que a malha de desenho)
-  modo: Modo;
+  circulos?: Circulo[];
   // fator matemático de escala de EXIBIÇÃO entre modelo e malha de desenho
   // (configurável; não afeta os dados geométricos usados na validação)
-  escala: number;
 }
 
 const f = (a: Vertex, b: Vertex): Segmento => [a, b];
@@ -28,8 +33,7 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Peixe",
     cols: 10,
     rows: 7,
-    modo: "reduzir",
-    escala: 1.4,
+    circulos: [{ id: "olho", centro: [3, 3.4], raio: 0.22 }],
     segmentos: [
       // corpo (losango)
       f([2, 4], [4, 2]),
@@ -52,8 +56,6 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Casa",
     cols: 10,
     rows: 7,
-    modo: "ampliar",
-    escala: 1.4,
     segmentos: [
       // paredes
       f([3, 6], [3, 4]),
@@ -72,8 +74,6 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Barco",
     cols: 10,
     rows: 7,
-    modo: "ampliar",
-    escala: 1.4,
     segmentos: [
       // casco
       f([2, 5], [3, 7]),
@@ -96,8 +96,6 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Árvore",
     cols: 10,
     rows: 7,
-    modo: "reduzir",
-    escala: 1.4,
     segmentos: [
       // tronco
       f([5, 7], [5, 5]),
@@ -116,8 +114,10 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Caminhão",
     cols: 10,
     rows: 7,
-    modo: "ampliar",
-    escala: 1.4,
+    circulos: [
+      { id: "roda-traseira", centro: [3, 6.4], raio: 0.65 },
+      { id: "roda-dianteira", centro: [8.5, 6.4], raio: 0.65 },
+    ],
     segmentos: [
       // carroceria
       f([1, 3], [1, 6]),
@@ -140,8 +140,6 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Flor",
     cols: 10,
     rows: 7,
-    modo: "reduzir",
-    escala: 1.4,
     segmentos: [
       // haste
       f([5, 4], [5, 7]),
@@ -169,14 +167,4 @@ export function segKey(seg: Segmento): string {
   return a < b ? `${a}|${b}` : `${b}|${a}`;
 }
 
-export function comparar(usuario: Segmento[], gabarito: Segmento[]) {
-  const setUser = new Set(usuario.map(segKey));
-  const setGab = new Set(gabarito.map(segKey));
-  let acertos = 0;
-  setUser.forEach((k) => {
-    if (setGab.has(k)) acertos++;
-  });
-  const faltando = [...setGab].filter((k) => !setUser.has(k)).length;
-  const errados = [...setUser].filter((k) => !setGab.has(k)).length;
-  return { acertos, faltando, errados, total: setGab.size, completo: faltando === 0 && errados === 0 };
-}
+export { comparar } from "./comparar";
