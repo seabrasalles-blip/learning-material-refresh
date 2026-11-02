@@ -4,12 +4,20 @@
 export type Vertex = [number, number];
 export type Segmento = [Vertex, Vertex];
 
+export type Modo = "reduzir" | "ampliar";
+
 export interface Figura {
   id: string;
   nome: string;
   cols: number; // 10
   rows: number; // 7
   segmentos: Segmento[];
+  // modo da atividade: "reduzir" (modelo exibido maior que a malha de desenho)
+  // ou "ampliar" (modelo exibido menor que a malha de desenho)
+  modo: Modo;
+  // fator matemático de escala de EXIBIÇÃO entre modelo e malha de desenho
+  // (configurável; não afeta os dados geométricos usados na validação)
+  escala: number;
 }
 
 const f = (a: Vertex, b: Vertex): Segmento => [a, b];
