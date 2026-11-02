@@ -18,9 +18,6 @@ export const Route = createFileRoute("/desenhar/$figura")({
       ],
     };
   },
-  beforeLoad: ({ params }) => {
-    if (!FIGURAS[params.figura]) throw notFound();
-  },
   component: Desenhar,
   notFoundComponent: () => (
     <div className="min-h-screen flex items-center justify-center p-6 text-center">
@@ -42,8 +39,10 @@ export const Route = createFileRoute("/desenhar/$figura")({
 
 function Desenhar() {
   const { figura: figId } = useParams({ from: "/desenhar/$figura" });
-  const figura = FIGURAS[figId]!;
+  const figura = FIGURAS[figId];
   const navigate = useNavigate();
+
+  if (!figura) throw notFound();
 
   const [segmentos, setSegmentos] = useState<Segmento[]>([]);
   const [pending, setPending] = useState<Vertex | null>(null);
@@ -57,41 +56,44 @@ function Desenhar() {
     setMostrarGabarito(true);
   }
 
-  return (
-    <RayBackground variant="blue">
-      <main className="min-h-screen flex flex-col px-3 py-4 md:px-6">
-        <div className="flex items-start gap-4 md:gap-6 flex-1">
-          {/* tool panel */}
-          <div className="flex flex-col gap-4">
-            <ToolPanel
-              pencilActive={pencilActive}
-              onPencil={() => {
-                setPencilActive(true);
-                setPending(null);
-              }}
-              onUndo={() => {
-                setSegmentos((s) => s.slice(0, -1));
-                setPending(null);
-                setResultado(null);
-                setMostrarGabarito(false);
-              }}
-              onErase={() => {
-                setSegmentos([]);
-                setPending(null);
-                setResultado(null);
-                setMostrarGabarito(false);
-              }}
-            />
-          </div>
+  // Escala de exibição explícita: o tamanho do modelo deriva de figura.escala,
+  // nunca de dimensionamento CSS acidental. As malhas mantêm a proporção.
+  const drawCell = 34;
+  const modelCell =
+    figura.modo === "reduzir" ? drawCell * figura.escala : drawCell / figura.escala;
 
-          {/* grids */}
-          <div className="flex-1 flex flex-col items-center gap-4 md:gap-6 max-w-4xl mx-auto">
-            <div className="w-full max-w-2xl">
-              <p className="text-center font-bold mb-1 text-[#1a3c5a]">Desenhe aqui:</p>
-              <DrawingGrid
+  const instrucao =
+    figura.modo === "reduzir"
+      ? "Observe o modelo e desenhe a figura menor na sua malha."
+      : "Observe o modelo e desenhe a figura maior na sua malha.";
+
+  return (
+    <RayBackground variant="blue" soft>
+      <main className="min-h-screen flex flex-col px-3 py-3 md:px-6">
+        {/* instrução */}
+        <p className="text-center font-bold text-[#1a3c5a] mb-3 text-sm md:text-base">
+          {instrucao}
+        </p>
+
+        {/* quadros lado a lado, alinhados pela borda superior */}
+        <div className="flex-1 flex flex-col md:flex-row items-center md:items-start justify-center gap-4 md:gap-8 min-h-0">
+          {/* modelo */}
+          <section className="flex flex-col items-center">
+            <h2 className="font-bold mb-1 text-[#1a3c5a] text-sm md:text-base">
+              Modelo — {figura.nome}
+            </h2>
+            <ReferenceGrid figura={figura} cell={modelCell} />
+          </section>
+
+          {/* desenho + ferramentas */}
+          <section className="flex flex-col items-center">
+            <h2 className="font-bold mb-1 text-[#1a3c5a] text-sm md:text-base">Desenhe aqui</h2>
+            <div className="flex items-start gap-3">
+              <div style={{ width: figura.cols * drawCell + 48, maxWidth: "100%" }}>
+                <DrawingGrid
                 cols={figura.cols}
                 rows={figura.rows}
-                cell={42}
+                cell={drawCell}
                 segmentos={segmentos}
                 pendingFrom={pending}
                 toolActive={pencilActive}
@@ -100,20 +102,33 @@ function Desenhar() {
                   setResultado(null);
                 }}
                 onSetPending={setPending}
+                />
+              </div>
+              <ToolPanel
+                pencilActive={pencilActive}
+                onPencil={() => {
+                  setPencilActive(true);
+                  setPending(null);
+                }}
+                onUndo={() => {
+                  setSegmentos((s) => s.slice(0, -1));
+                  setPending(null);
+                  setResultado(null);
+                  setMostrarGabarito(false);
+                }}
+                onErase={() => {
+                  setSegmentos([]);
+                  setPending(null);
+                  setResultado(null);
+                  setMostrarGabarito(false);
+                }}
               />
             </div>
-
-            <div className="w-full max-w-2xl">
-              <p className="text-center font-bold mb-1 text-[#1a3c5a]">Modelo — {figura.nome}:</p>
-              <div className="relative">
-                <ReferenceGrid figura={figura} cell={38} className="w-full" />
-              </div>
-            </div>
-          </div>
+          </section>
         </div>
 
         {/* bottom actions */}
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between mt-3">
           <Link to="/menu">
             <CartoonButton tone="cyan">VOLTAR</CartoonButton>
           </Link>

@@ -2,12 +2,14 @@ import type { ReactNode } from "react";
 
 interface Props {
   variant: "blue" | "green";
+  /** soft = raios com menor intensidade (telas de atividade, para não disputar atenção) */
+  soft?: boolean;
   children: ReactNode;
 }
 
-export function RayBackground({ variant, children }: Props) {
-  const lightColor = variant === "blue" ? "#7dd3e8" : "#a8e063";
-  const darkColor = variant === "blue" ? "#2596be" : "#5fa83a";
+export function RayBackground({ variant, soft = false, children }: Props) {
+  const lightColor = variant === "blue" ? (soft ? "#c4ecf4" : "#7dd3e8") : (soft ? "#d8f0b8" : "#a8e063");
+  const darkColor = variant === "blue" ? (soft ? "#8fcde0" : "#2596be") : (soft ? "#9ccc6e" : "#5fa83a");
 
   return (
     <div
