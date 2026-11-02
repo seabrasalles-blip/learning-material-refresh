@@ -89,7 +89,8 @@ function Desenhar() {
           <section className="flex flex-col items-center">
             <h2 className="font-bold mb-1 text-[#1a3c5a] text-sm md:text-base">Desenhe aqui</h2>
             <div className="flex items-start gap-3">
-              <DrawingGrid
+              <div style={{ width: figura.cols * drawCell + 48, maxWidth: "100%" }}>
+                <DrawingGrid
                 cols={figura.cols}
                 rows={figura.rows}
                 cell={drawCell}
