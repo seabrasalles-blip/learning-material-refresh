@@ -31,3 +31,6 @@
 - Casa, barco e caminhão mantêm seus segmentos anteriores: o vídeo não apresenta suas telas de atividade com detalhe suficiente para certificação de fidelidade integral. Centros e raios das rodas são posicionamentos proporcionais escolhidos para o desenho atual, não medições certificadas do original.
 - A reprodução do exemplo é lembrada somente durante a sessão do navegador; não há contas, histórico ou armazenamento de progresso escolar.
 - A validação matemática das geometrias atuais foi efetivamente testada; isso não certifica a correspondência de todos os desenhos com o arquivo FLA original.
+## Revisão do sistema de escalas (nov/2026)
+
+A transformação deixou de ser geométrica e passou a ser apenas visual: modelo e resposta usam as mesmas coordenadas, colunas e linhas; só o tamanho físico dos quadradinhos muda (22 px vs 44 px, fator 2 ou 1/2). `criarDesafio` devolve `cellModelo`/`cellResposta`; `comparar` segue comparando coordenadas correspondentes. Círculos fixos mantêm o raio em unidades de célula, acompanhando a escala automaticamente. A demonstração da Akemi mostra duas malhas com quadradinhos de tamanhos diferentes.

@@ -39,7 +39,6 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   }, []);
   if (!figura) throw notFound();
   const desafio = criarDesafio(figura, modo);
-  const cell = 22;
   const resume = () => {
     setExample(false);
     try { sessionStorage.setItem("akemi-example-seen", "yes"); } catch { /* Session preference is optional. */ }
@@ -52,9 +51,9 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
         <p className="font-bold">{modo === "ampliar" ? "Desenhe com o dobro da medida de cada lado." : "Desenhe com metade da medida de cada lado."}</p>
       </header>
       <div className="activity-boards">
-        <section className="activity-board" aria-label="Modelo"><h2>Modelo</h2><ReferenceGrid figura={desafio.modelo} cell={cell} /></section>
+        <section className="activity-board" aria-label="Modelo"><h2>Modelo</h2><ReferenceGrid figura={desafio.modelo} cell={desafio.cellModelo} /></section>
         <section className="activity-board" aria-label="Desenho do aluno"><h2>Desenhe aqui</h2>
-          <DrawingGrid cols={desafio.resposta.cols} rows={desafio.resposta.rows} cell={cell} segmentos={segmentos} circulos={desafio.resposta.circulos} pendingFrom={pending} toolActive onAddSegment={s => { setSegmentos(prev => [...prev, s]); setResultado(null); }} onSetPending={setPending} />
+          <DrawingGrid cols={desafio.resposta.cols} rows={desafio.resposta.rows} cell={desafio.cellResposta} segmentos={segmentos} circulos={desafio.resposta.circulos} pendingFrom={pending} toolActive onAddSegment={s => { setSegmentos(prev => [...prev, s]); setResultado(null); }} onSetPending={setPending} />
           <div className="activity-tools"><ToolPanel pencilActive onPencil={() => setPending(null)} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setSegmentos([]); changed(); }} /></div>
         </section>
       </div>
