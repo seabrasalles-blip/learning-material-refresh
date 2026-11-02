@@ -1,8 +1,9 @@
 # Pedagogical refactor
 
-- [ ] Add explicit fixed circular geometry and inspect fidelity.
-- [ ] Add figure-first mode selection and exact scale/position challenges.
-- [ ] Validate transformed line coverage, including collinear subdivisions.
-- [ ] Add replayable, pausable SVG demonstration.
-- [ ] Preserve visual style and fit desktop activity at 1200 × 675.
-- [ ] Run geometry tests and end-to-end checks for all twelve challenges; summarize limitations.
+- [x] Add explicit fixed circular geometry and inspect available video reference.
+- [x] Add figure-first mode selection and exact scale/position challenges.
+- [x] Validate transformed line coverage, including collinear subdivisions.
+- [x] Add replayable, pausable SVG demonstration.
+- [x] Preserve visual style and fit desktop activity at 1200 × 675.
+- [x] Run geometry tests and end-to-end checks for all twelve challenges; summarize limitations.
+- [ ] Replace provisional tree with original step figure and verify remaining original outlines — blocked by missing activity-level references for these figures.
