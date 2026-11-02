@@ -10,7 +10,7 @@
 
 # Cell-size scaling revision
 
-- [ ] Scale via physical cell size only: same coordinates, columns and rows in both grids; no vertex transformation.
-- [ ] Update Akemi demonstration to show two grids with different cell sizes.
-- [ ] Keep fixed circles pre-drawn on the response grid, radius in cell units.
-- [ ] Update tests and re-verify all twelve challenges in the browser at 1200 × 675.
+- [x] Scale via physical cell size only: same coordinates, columns and rows in both grids; no vertex transformation.
+- [x] Update Akemi demonstration to show two grids with different cell sizes.
+- [x] Keep fixed circles pre-drawn on the response grid, radius in cell units.
+- [x] Update tests and re-verify all twelve challenges in the browser at 1200 × 675.
