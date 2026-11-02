@@ -102,7 +102,8 @@ function Desenhar() {
                   setResultado(null);
                 }}
                 onSetPending={setPending}
-              />
+                />
+              </div>
               <ToolPanel
                 pencilActive={pencilActive}
                 onPencil={() => {
