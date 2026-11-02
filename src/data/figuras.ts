@@ -28,6 +28,8 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Peixe",
     cols: 10,
     rows: 7,
+    modo: "reduzir",
+    escala: 1.4,
     segmentos: [
       // corpo (losango)
       f([2, 4], [4, 2]),
@@ -50,6 +52,8 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Casa",
     cols: 10,
     rows: 7,
+    modo: "ampliar",
+    escala: 1.4,
     segmentos: [
       // paredes
       f([3, 6], [3, 4]),
@@ -68,6 +72,8 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Barco",
     cols: 10,
     rows: 7,
+    modo: "ampliar",
+    escala: 1.4,
     segmentos: [
       // casco
       f([2, 5], [3, 7]),
@@ -84,10 +90,14 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   arvore: {
+    // ATENÇÃO: no material original esta posição é a "figura em degraus".
+    // Dados da Árvore preservados provisoriamente — correção pendente.
     id: "arvore",
     nome: "Árvore",
     cols: 10,
     rows: 7,
+    modo: "reduzir",
+    escala: 1.4,
     segmentos: [
       // tronco
       f([5, 7], [5, 5]),
@@ -106,6 +116,8 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Caminhão",
     cols: 10,
     rows: 7,
+    modo: "ampliar",
+    escala: 1.4,
     segmentos: [
       // carroceria
       f([1, 3], [1, 6]),
@@ -128,6 +140,8 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Flor",
     cols: 10,
     rows: 7,
+    modo: "reduzir",
+    escala: 1.4,
     segmentos: [
       // haste
       f([5, 4], [5, 7]),
