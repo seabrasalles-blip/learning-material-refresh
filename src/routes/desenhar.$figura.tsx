@@ -39,8 +39,10 @@ export const Route = createFileRoute("/desenhar/$figura")({
 
 function Desenhar() {
   const { figura: figId } = useParams({ from: "/desenhar/$figura" });
-  const figura = FIGURAS[figId]!;
+  const figura = FIGURAS[figId];
   const navigate = useNavigate();
+
+  if (!figura) throw notFound();
 
   const [segmentos, setSegmentos] = useState<Segmento[]>([]);
   const [pending, setPending] = useState<Vertex | null>(null);
