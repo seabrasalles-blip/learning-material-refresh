@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as DesenharFiguraRouteImport } from './routes/desenhar.$figura'
+import { Route as EscolherFiguraRouteImport } from './routes/escolher.$figura'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const DesenharFiguraRoute = DesenharFiguraRouteImport.update({
   path: '/desenhar/$figura',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EscolherFiguraRoute = EscolherFiguraRouteImport.update({
+  id: '/escolher/$figura',
+  path: '/escolher/$figura',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
+  '/escolher/$figura': typeof EscolherFiguraRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
+  '/escolher/$figura': typeof EscolherFiguraRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
+  '/escolher/$figura': typeof EscolherFiguraRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/menu' | '/desenhar/$figura'
+  fullPaths: '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/menu' | '/desenhar/$figura'
-  id: '__root__' | '/' | '/menu' | '/desenhar/$figura'
+  to: '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
+  id: '__root__' | '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   MenuRoute: typeof MenuRoute
   DesenharFiguraRoute: typeof DesenharFiguraRoute
+  EscolherFiguraRoute: typeof EscolherFiguraRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesenharFiguraRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/escolher/$figura': {
+      id: '/escolher/$figura'
+      path: '/escolher/$figura'
+      fullPath: '/escolher/$figura'
+      preLoaderRoute: typeof EscolherFiguraRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   MenuRoute: MenuRoute,
   DesenharFiguraRoute: DesenharFiguraRoute,
+  EscolherFiguraRoute: EscolherFiguraRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

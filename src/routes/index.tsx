@@ -9,6 +9,10 @@ export const Route = createFileRoute("/")({
     meta: [
       { title: "Malhas Quadriculadas — Akemi" },
       { name: "description", content: "Aprenda a usar a malha quadriculada para desenhar com a Akemi." },
+      { property: "og:title", content: "Malhas Quadriculadas — Akemi" },
+      { property: "og:description", content: "Amplie e reduza figuras com Akemi na malha quadriculada." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Intro,

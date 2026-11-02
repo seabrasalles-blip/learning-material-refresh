@@ -7,7 +7,7 @@ interface Props {
   className?: string;
 }
 
-const LETTERS = "abcdefghijklmnop";
+const LETTERS = "abcdefghijklmnopqrstuvwxyz";
 
 export function ReferenceGrid({ figura, cell = 36, showLabels = true, className = "" }: Props) {
   const { cols, rows, segmentos } = figura;
@@ -22,8 +22,8 @@ export function ReferenceGrid({ figura, cell = 36, showLabels = true, className 
       viewBox={`0 0 ${w} ${h}`}
       className={className}
       style={{
-        background: "white",
-        border: "3px solid #111",
+        background: "var(--grid-paper)",
+        border: "3px solid var(--grid-ink)",
         borderRadius: 6,
         width: w,
         height: "auto",
@@ -32,21 +32,21 @@ export function ReferenceGrid({ figura, cell = 36, showLabels = true, className 
     >
       {/* grid lines */}
       {Array.from({ length: cols + 1 }).map((_, i) => (
-        <line key={`v${i}`} x1={pad + i * cell} y1={pad} x2={pad + i * cell} y2={pad + rows * cell} stroke="#444" strokeWidth={1} />
+        <line key={`v${i}`} x1={pad + i * cell} y1={pad} x2={pad + i * cell} y2={pad + rows * cell} stroke="var(--grid-line)" strokeWidth={1} />
       ))}
       {Array.from({ length: rows + 1 }).map((_, i) => (
-        <line key={`h${i}`} x1={pad} y1={pad + i * cell} x2={pad + cols * cell} y2={pad + i * cell} stroke="#444" strokeWidth={1} />
+        <line key={`h${i}`} x1={pad} y1={pad + i * cell} x2={pad + cols * cell} y2={pad + i * cell} stroke="var(--grid-line)" strokeWidth={1} />
       ))}
       {/* labels */}
       {showLabels &&
         Array.from({ length: cols }).map((_, i) => (
-          <text key={`cl${i}`} x={pad + i * cell + cell / 2} y={pad - 6} textAnchor="middle" fontSize={13} fontWeight={700} fill="#111">
+          <text key={`cl${i}`} x={pad + i * cell + cell / 2} y={pad - 6} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--grid-ink)">
             {LETTERS[i]}
           </text>
         ))}
       {showLabels &&
         Array.from({ length: rows }).map((_, i) => (
-          <text key={`rl${i}`} x={pad - 8} y={pad + i * cell + cell / 2 + 4} textAnchor="middle" fontSize={13} fontWeight={700} fill="#111">
+          <text key={`rl${i}`} x={pad - 8} y={pad + i * cell + cell / 2 + 4} textAnchor="middle" fontSize={13} fontWeight={700} fill="var(--grid-ink)">
             {i + 1}
           </text>
         ))}
@@ -58,10 +58,13 @@ export function ReferenceGrid({ figura, cell = 36, showLabels = true, className 
           y1={py(s[0][1])}
           x2={px(s[1][0])}
           y2={py(s[1][1])}
-          stroke="#111"
+           stroke="var(--grid-ink)"
           strokeWidth={3}
           strokeLinecap="round"
         />
+      ))}
+      {figura.circulos?.map(c => (
+        <circle key={c.id} data-fixed-circle={c.id} cx={px(c.centro[0])} cy={py(c.centro[1])} r={c.raio * cell} fill="var(--grid-paper)" stroke="var(--grid-ink)" strokeWidth={2.5} />
       ))}
     </svg>
   );

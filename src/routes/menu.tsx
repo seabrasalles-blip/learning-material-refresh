@@ -11,6 +11,10 @@ export const Route = createFileRoute("/menu")({
     meta: [
       { title: "Escolha a figura — Malhas com Akemi" },
       { name: "description", content: "Escolha qual figura desenhar na malha quadriculada." },
+      { property: "og:title", content: "Escolha a figura — Malhas com Akemi" },
+      { property: "og:description", content: "Seis figuras para ampliar e reduzir com Akemi." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Menu,
@@ -43,10 +47,10 @@ function Menu() {
             >
               <div className="grid grid-cols-3 gap-3 md:gap-5">
                 {FIGURAS_LIST.map((fig) => (
-                  <button
+                  <CartoonButton
                     key={fig.id}
                     type="button"
-                    onClick={() => navigate({ to: "/desenhar/$figura", params: { figura: fig.id } })}
+                    onClick={() => navigate({ to: "/escolher/$figura", params: { figura: fig.id } })}
                     className="flex flex-col items-center gap-1 p-2 rounded-xl hover:bg-yellow-100 transition cursor-pointer"
                   >
                     <ReferenceGrid figura={fig} cell={14} showLabels={false} className="w-32 md:w-40" />
@@ -56,7 +60,7 @@ function Menu() {
                     >
                       {fig.nome.toUpperCase()}
                     </span>
-                  </button>
+                  </CartoonButton>
                 ))}
               </div>
             </div>
