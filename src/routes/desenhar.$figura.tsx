@@ -18,10 +18,6 @@ export const Route = createFileRoute("/desenhar/$figura")({
       ],
     };
   },
-  beforeLoad: ({ params }) => {
-    if (!FIGURAS[params.figura]) throw notFound();
-    return {};
-  },
   component: Desenhar,
   notFoundComponent: () => (
     <div className="min-h-screen flex items-center justify-center p-6 text-center">
