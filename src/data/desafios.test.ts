@@ -10,13 +10,13 @@ describe("all twelve transformed challenges", () => {
       d.modelo.segmentos.forEach((s, i) => s.forEach((p, j) => {
         const result = d.resposta.segmentos[i][j];
         expect(result).toEqual(transformarPonto(p, d.transformacao));
-        result.forEach((n, k) => { expect(Number.isInteger(n)).toBe(true); expect(n).toBeGreaterThanOrEqual(1); expect(n).toBeLessThanOrEqual(k === 0 ? 21 : 15); });
+        result.forEach((n, k) => { expect(Number.isInteger(n)).toBe(true); expect(n).toBeGreaterThanOrEqual(1); expect(n).toBeLessThanOrEqual(k === 0 ? 21 : 17); });
       }));
       for (const f of [d.modelo, d.resposta]) for (const c of f.circulos ?? []) {
         expect(c.centro[0] - c.raio).toBeGreaterThanOrEqual(1);
         expect(c.centro[0] + c.raio).toBeLessThanOrEqual(21);
         expect(c.centro[1] - c.raio).toBeGreaterThanOrEqual(1);
-        expect(c.centro[1] + c.raio).toBeLessThanOrEqual(15);
+        expect(c.centro[1] + c.raio).toBeLessThanOrEqual(17);
       }
       d.resposta.circulos?.forEach((c, i) => {
         const original = d.modelo.circulos?.[i];

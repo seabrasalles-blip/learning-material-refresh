@@ -18,11 +18,8 @@ export interface Figura {
   cols: number; // 10
   rows: number; // 7
   segmentos: Segmento[];
-  // modo da atividade: "reduzir" (modelo exibido maior que a malha de desenho)
-  // ou "ampliar" (modelo exibido menor que a malha de desenho)
+  // Fixed supplied geometry, separate from student-drawn segments.
   circulos?: Circulo[];
-  // fator matemático de escala de EXIBIÇÃO entre modelo e malha de desenho
-  // (configurável; não afeta os dados geométricos usados na validação)
 }
 
 const f = (a: Vertex, b: Vertex): Segmento => [a, b];
@@ -33,22 +30,20 @@ export const FIGURAS: Record<string, Figura> = {
     nome: "Peixe",
     cols: 10,
     rows: 7,
-    circulos: [{ id: "olho", centro: [3, 3.4], raio: 0.22 }],
+    circulos: [{ id: "olho", centro: [4, 3], raio: 0.3 }],
     segmentos: [
-      // corpo (losango)
-      f([2, 4], [4, 2]),
+      // Outline transcribed from the original video, including mouth and tail notches.
+      f([2, 3], [4, 2]),
       f([4, 2], [7, 2]),
-      f([7, 2], [9, 4]),
-      f([9, 4], [7, 6]),
+      f([7, 2], [8, 3]),
+      f([8, 3], [9, 2]),
+      f([9, 2], [9, 6]),
+      f([9, 6], [8, 5]),
+      f([8, 5], [7, 6]),
       f([7, 6], [4, 6]),
-      f([4, 6], [2, 4]),
-      // boca
-      f([2, 4], [1, 3]),
-      f([2, 4], [1, 5]),
-      // cauda
-      f([9, 4], [10, 2]),
-      f([9, 4], [10, 6]),
-      f([10, 2], [10, 6]),
+      f([4, 6], [2, 5]),
+      f([2, 5], [3, 4]),
+      f([3, 4], [2, 3]),
     ],
   },
   casa: {
@@ -139,20 +134,26 @@ export const FIGURAS: Record<string, Figura> = {
     id: "flor",
     nome: "Flor",
     cols: 10,
-    rows: 7,
+    rows: 8,
     segmentos: [
-      // haste
-      f([5, 4], [5, 7]),
-      // folhas
-      f([5, 6], [3, 5]),
-      f([3, 5], [5, 5]),
-      f([5, 6], [7, 5]),
-      f([7, 5], [5, 5]),
-      // pétalas (losango grande no topo)
-      f([5, 1], [7, 3]),
-      f([7, 3], [5, 5]),
-      f([5, 5], [3, 3]),
-      f([3, 3], [5, 1]),
+      // Original video's petals, inner veins, stem and asymmetric leaves.
+      f([5, 1], [4, 2]),
+      f([5, 1], [6, 2]),
+      f([4, 2], [4, 3]),
+      f([6, 2], [6, 3]),
+      f([4, 3], [5, 4]),
+      f([6, 3], [5, 4]),
+      f([4, 2], [5, 3]),
+      f([6, 2], [5, 3]),
+      f([5, 1], [5, 8]),
+      f([3, 5], [4, 5]),
+      f([4, 5], [5, 6]),
+      f([5, 6], [4, 6]),
+      f([4, 6], [3, 5]),
+      f([5, 7], [6, 6]),
+      f([6, 6], [7, 6]),
+      f([7, 6], [6, 7]),
+      f([6, 7], [5, 7]),
     ],
   },
 };

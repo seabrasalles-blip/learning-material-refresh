@@ -8,7 +8,7 @@ export function transformarFigura(figura: Figura, t: Transformacao): Figura {
   return {
     ...figura,
     cols: 20,
-    rows: 14,
+    rows: 16,
     segmentos: figura.segmentos.map(([a, b]) => [transformarPonto(a, t), transformarPonto(b, t)]),
     circulos: figura.circulos?.map(c => ({ ...c, centro: transformarPonto(c.centro, t), raio: c.raio * t.fator })),
   };
