@@ -4,6 +4,28 @@ import type { Modo } from "@/data/figuras";
 import { CartoonButton } from "./CartoonButton";
 import akemi from "@/assets/akemi-wave.png";
 
+// Duas malhas com a mesma quantidade de quadradinhos; só o tamanho físico da
+// célula muda. A malha da direita anima do tamanho da esquerda ao tamanho final.
+const CELLS = 6;
+const BIG = 26;
+const SMALL = 13;
+
+function MiniGrid({ cell, square }: { cell: number; square: boolean }) {
+  const pad = 8;
+  const size = CELLS * cell + pad * 2;
+  return (
+    <svg viewBox={`0 0 ${size} ${size}`} style={{ width: size, height: "auto", background: "var(--grid-paper)", border: "3px solid var(--grid-ink)", borderRadius: 6 }} aria-hidden="true">
+      {Array.from({ length: CELLS + 1 }, (_, i) => (
+        <g key={i} stroke="var(--grid-line)" strokeWidth={1}>
+          <line x1={pad + i * cell} y1={pad} x2={pad + i * cell} y2={pad + CELLS * cell} />
+          <line x1={pad} y1={pad + i * cell} x2={pad + CELLS * cell} y2={pad + i * cell} />
+        </g>
+      ))}
+      {square && <rect x={pad + 2 * cell} y={pad + 2 * cell} width={2 * cell} height={2 * cell} fill="none" stroke="var(--grid-preview)" strokeWidth={4} data-example-square="true" />}
+    </svg>
+  );
+}
+
 export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinue: () => void }) {
   const [progress, setProgress] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -30,7 +52,9 @@ export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinu
     frame = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(frame);
   }, [playing]);
-  const side = modo === "ampliar" ? 2 + 2 * progress : 4 - 2 * progress;
+  const modelCell = modo === "ampliar" ? SMALL : BIG;
+  const targetCell = modo === "ampliar" ? BIG : SMALL;
+  const cell = modelCell + (targetCell - modelCell) * progress;
   const play = () => {
     if (reduced) { progressRef.current = 1; setProgress(1); return; }
     if (progressRef.current >= 1) { progressRef.current = 0; setProgress(0); }
@@ -42,15 +66,13 @@ export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinu
         <h2 id="example-title" className="text-xl font-extrabold mb-3">{modo === "ampliar" ? "AMPLIAR — DOBRAR" : "REDUZIR — METADE"}</h2>
         <div className="example-content">
           <img src={akemi} alt="Akemi" className="example-akemi" />
-          <svg className="example-grid" viewBox="0 0 260 260" aria-label="Exemplo de transformação de um quadrado">
-            <rect width="260" height="260" fill="var(--grid-paper)" />
-            {Array.from({ length: 9 }, (_, i) => <g key={i} stroke="var(--grid-line)"><line x1={10 + i * 30} y1="10" x2={10 + i * 30} y2="250" /><line x1="10" y1={10 + i * 30} x2="250" y2={10 + i * 30} /></g>)}
-            <rect x="70" y="70" width={side * 30} height={side * 30} fill="none" stroke="var(--grid-preview)" strokeWidth="4" data-example-square="true" />
-            {Array.from({ length: Math.floor(side) }, (_, i) => <text key={i} x={85 + i * 30} y="60" textAnchor="middle" fontSize="16" fontWeight="700" fill="var(--grid-ink)">{i + 1}</text>)}
-          </svg>
+          <MiniGrid cell={modelCell} square />
+          <MiniGrid cell={cell} square />
         </div>
-        <p className="font-bold my-2">{modo === "ampliar" ? "2 → 4 quadradinhos em cada lado" : "4 → 2 quadradinhos em cada lado"}</p>
-        <p>{modo === "ampliar" ? "Veja! Cada lado tinha 2 quadradinhos. Agora tem 4. A figura dobrou de tamanho!" : "Agora cada lado ficou com metade da medida. A figura ficou menor, mas manteve a mesma forma!"}</p>
+        <p className="font-bold my-2">{modo === "ampliar" ? "Quadradinhos menores → quadradinhos maiores" : "Quadradinhos maiores → quadradinhos menores"}</p>
+        <p>{modo === "ampliar"
+          ? "Veja! As duas malhas têm os mesmos quadradinhos, mas os da direita são maiores. Desenhe a figura nos mesmos pontos: ela ficará maior!"
+          : "Veja! As duas malhas têm os mesmos quadradinhos, mas os da direita são menores. Desenhe a figura nos mesmos pontos: ela ficará menor!"}</p>
         <div className="example-controls">
           <CartoonButton onClick={play} disabled={playing}><Play size={18} className="mr-1" /> REPRODUZIR</CartoonButton>
           <CartoonButton onClick={() => setPlaying(false)} disabled={!playing}><Pause size={18} className="mr-1" /> PAUSAR</CartoonButton>
