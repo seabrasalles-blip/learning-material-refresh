@@ -20,6 +20,7 @@ export const Route = createFileRoute("/desenhar/$figura")({
   },
   beforeLoad: ({ params }) => {
     if (!FIGURAS[params.figura]) throw notFound();
+    return {};
   },
   component: Desenhar,
   notFoundComponent: () => (
