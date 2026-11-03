@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { FIGURAS_LIST, FIGURAS, comparar, type Segmento } from "./figuras";
 import { criarDesafio, CELL_BASE } from "./desafios";
 
-describe("all twelve challenges", () => {
+describe("all twelve original challenges", () => {
   for (const figura of FIGURAS_LIST) for (const modo of ["ampliar", "reduzir"] as const) {
     const d = criarDesafio(figura, modo);
     it(`${figura.id} ${modo}: same coordinates and grid, cell size scaled by the factor`, () => {
@@ -41,6 +41,25 @@ describe("all twelve challenges", () => {
 it("fish supplies one eye and truck two named wheels", () => {
   expect(FIGURAS.peixe.circulos?.map(c => c.id)).toEqual(["olho"]);
   expect(FIGURAS.caminhao.circulos?.map(c => c.id)).toEqual(["roda-traseira", "roda-dianteira"]);
+});
+it("restores the six original figures, with steps rather than a substitute tree", () => {
+  expect(FIGURAS_LIST.map(f => f.id)).toEqual(["flor", "degraus", "peixe", "barco", "caminhao", "casa"]);
+});
+it("house has a trapezoid roof, two windows and a door", () => {
+  const lines = FIGURAS.casa.segmentos;
+  expect(lines).toContainEqual([[3, 1], [8, 1]]);
+  for (const line of [[ [3,4],[4,4] ], [[7,4],[8,4]], [[5,5],[6,5]]] as Segmento[]) expect(lines).toContainEqual(line);
+});
+it("boat preserves separate sails, mast and five fixed filled portholes", () => {
+  for (const line of [[[6,1],[5,6]], [[6,1],[6,6]], [[6,2],[9,5]]] as Segmento[]) expect(FIGURAS.barco.segmentos).toContainEqual(line);
+  expect(FIGURAS.barco.circulos).toHaveLength(5);
+  expect(FIGURAS.barco.circulos?.every(c => c.preenchido)).toBe(true);
+});
+it("truck retains the slanted body and internal straight divisions", () => {
+  for (const line of [[[1,4],[3,2]], [[4,2],[4,4]], [[5,2],[5,4]], [[6,2],[6,4]], [[8,3],[8,5]]] as Segmento[]) expect(FIGURAS.caminhao.segmentos).toContainEqual(line);
+});
+it("steps preserve the four inner diagonals and baseline", () => {
+  for (const line of [[[3,4],[4,5]], [[4,4],[5,5]], [[5,5],[6,4]], [[6,5],[7,4]], [[1,7],[11,7]]] as Segmento[]) expect(FIGURAS.degraus.segmentos).toContainEqual(line);
 });
 it("line coverage rejects equal segment counts, gaps and collinear extensions", () => {
   const answer: Segmento[] = [[[1, 1], [5, 1]]];
