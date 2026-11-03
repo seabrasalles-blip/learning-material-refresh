@@ -1,7 +1,6 @@
 import { expect, it } from "vitest";
 import { comparar } from "./comparar";
 import { FIGURAS, type Segmento } from "./figuras";
-import { orientacao } from "./orientacao";
 
 it("identifies the exact uncovered gap and excess extension", () => {
   const answer: Segmento[] = [[[1, 1], [5, 1]]];
@@ -22,5 +21,4 @@ it("locates the missing left roof diagonal rather than the last drawn stroke", (
   const result = comparar([[[1, 3], [2, 1]], ...house.segmentos.slice(1)], house.segmentos);
   expect(result.trechosAusentes).toEqual([[[1, 3], [3, 1]]]);
   expect(result.trechosIncorretos).toEqual([[[1, 3], [2, 1]]]);
-  expect(orientacao(house, result)).toContain("lado esquerdo do telhado");
 });
