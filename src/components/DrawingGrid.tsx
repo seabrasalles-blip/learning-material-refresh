@@ -133,7 +133,7 @@ export function DrawingGrid({
         />
       ))}
       {circulos.map(c => (
-        <circle key={c.id} data-fixed-circle={c.id} cx={px(c.centro[0])} cy={py(c.centro[1])} r={c.raio * cell} fill="var(--grid-paper)" stroke="var(--grid-ink)" strokeWidth={2.5} />
+        <circle key={c.id} data-fixed-circle={c.id} cx={px(c.centro[0])} cy={py(c.centro[1])} r={c.raio * cell} fill={c.preenchido ? "var(--grid-ink)" : "var(--grid-paper)"} stroke="var(--grid-ink)" strokeWidth={2.5} />
       ))}
       {/* preview line from pending to hover */}
       {pendingFrom && hover && (

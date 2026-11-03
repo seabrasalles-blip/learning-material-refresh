@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApresentacaoRouteImport } from './routes/apresentacao'
 import { Route as ConclusaoRouteImport } from './routes/conclusao'
 import { Route as MenuRouteImport } from './routes/menu'
+import { Route as TransicaoRouteImport } from './routes/transicao'
 import { Route as DesenharFiguraRouteImport } from './routes/desenhar.$figura'
 import { Route as EscolherFiguraRouteImport } from './routes/escolher.$figura'
 
@@ -36,6 +37,11 @@ const MenuRoute = MenuRouteImport.update({
   path: '/menu',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TransicaoRoute = TransicaoRouteImport.update({
+  id: '/transicao',
+  path: '/transicao',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DesenharFiguraRoute = DesenharFiguraRouteImport.update({
   id: '/desenhar/$figura',
   path: '/desenhar/$figura',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/apresentacao': typeof ApresentacaoRoute
   '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
+  '/transicao': typeof TransicaoRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/apresentacao': typeof ApresentacaoRoute
   '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
+  '/transicao': typeof TransicaoRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/apresentacao': typeof ApresentacaoRoute
   '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
+  '/transicao': typeof TransicaoRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/apresentacao'
     | '/conclusao'
     | '/menu'
+    | '/transicao'
     | '/desenhar/$figura'
     | '/escolher/$figura'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/apresentacao'
     | '/conclusao'
     | '/menu'
+    | '/transicao'
     | '/desenhar/$figura'
     | '/escolher/$figura'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/apresentacao'
     | '/conclusao'
     | '/menu'
+    | '/transicao'
     | '/desenhar/$figura'
     | '/escolher/$figura'
   fileRoutesById: FileRoutesById
@@ -104,6 +116,7 @@ export interface RootRouteChildren {
   ApresentacaoRoute: typeof ApresentacaoRoute
   ConclusaoRoute: typeof ConclusaoRoute
   MenuRoute: typeof MenuRoute
+  TransicaoRoute: typeof TransicaoRoute
   DesenharFiguraRoute: typeof DesenharFiguraRoute
   EscolherFiguraRoute: typeof EscolherFiguraRoute
 }
@@ -138,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MenuRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/transicao': {
+      id: '/transicao'
+      path: '/transicao'
+      fullPath: '/transicao'
+      preLoaderRoute: typeof TransicaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/desenhar/$figura': {
       id: '/desenhar/$figura'
       path: '/desenhar/$figura'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApresentacaoRoute: ApresentacaoRoute,
   ConclusaoRoute: ConclusaoRoute,
   MenuRoute: MenuRoute,
+  TransicaoRoute: TransicaoRoute,
   DesenharFiguraRoute: DesenharFiguraRoute,
   EscolherFiguraRoute: EscolherFiguraRoute,
 }

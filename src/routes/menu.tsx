@@ -5,7 +5,7 @@ import { CartoonButton } from "@/components/CartoonButton";
 import { ReferenceGrid } from "@/components/ReferenceGrid";
 import { FIGURAS_LIST } from "@/data/figuras";
 import { pageMeta } from "@/lib/page-meta";
-export const Route = createFileRoute("/menu")({ head: () => pageMeta("Escolha a figura", "Escolha peixe, casa, barco, árvore, caminhão ou flor para desenhar com Mila."), component: Menu });
+export const Route = createFileRoute("/menu")({ head: () => pageMeta("Escolha a figura", "Escolha flor, figura em degraus, peixe, barco, caminhão ou casa para desenhar com Mila."), component: Menu });
 function Menu() {
  const navigate = useNavigate();
  return <LearningScreen step={2} onBack={() => navigate({ to: "/apresentacao" })}>

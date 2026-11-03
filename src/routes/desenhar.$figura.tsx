@@ -11,6 +11,7 @@ import { CartoonButton } from "@/components/CartoonButton";
 import { ScaleDemonstration } from "@/components/ScaleDemonstration";
 import { FIGURAS, comparar, type Modo, type Segmento, type Vertex } from "@/data/figuras";
 import { criarDesafio } from "@/data/desafios";
+import { completeActivity, journeyComplete } from "@/lib/session-progress";
 
 export const Route = createFileRoute("/desenhar/$figura")({
   validateSearch: (search: Record<string, unknown>): { modo: Modo } => ({ modo: search.modo === "ampliar" ? "ampliar" : "reduzir" }),
@@ -48,7 +49,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     try { sessionStorage.setItem("akemi-example-seen", "yes"); } catch { /* Session preference is optional. */ }
   };
   const changed = () => { setPending(null); setResultado(null); };
-  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); setResultado(comparar(segmentos, desafio.resposta.segmentos)); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
@@ -67,7 +68,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
         <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : "Observe o modelo e tente novamente."}</p>
         {!resultado.completo && <p className="feedback-count">Acertos: {resultado.acertos} de {resultado.total}{resultado.faltando > 0 && ` · Faltam ${resultado.faltando} trecho(s)`}{resultado.errados > 0 && ` · ${resultado.errados} trecho(s) a mais ou incorreto(s)`}</p>}
         <div className="example-controls">{resultado.completo ? <>
-          <CartoonButton tone="pink" onClick={() => navigate({ to: "/conclusao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
+          <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo })) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
           <CartoonButton onClick={() => navigate({ to: "/menu" })}>ESCOLHER OUTRA FIGURA</CartoonButton>
           <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
         </> : <>
