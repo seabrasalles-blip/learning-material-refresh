@@ -335,3 +335,12 @@
 .cover-hotspot:hover { transform: scale(1.03); box-shadow: 0 0 0 4px var(--mila-highlight); }
 .cover-hotspot:focus-visible { outline: 4px solid var(--mila-highlight); outline-offset: 3px; }
 .drawing-grid:focus-visible { outline: 3px solid var(--mila-highlight); outline-offset: 4px; }
+
+.demo-dialog { max-height: 96vh; overflow: auto; }
+.demo-topbar { display: flex; justify-content: space-between; align-items: center; font-weight: 800; font-size: 13px; margin-bottom: 6px; }
+.skip-example { padding: 6px 12px; font-size: 12px; }
+.tutorial-speech { font-weight: 800; max-width: 380px; margin-bottom: 4px; }
+.tutorial-counter { font-size: 12px; font-weight: 700; opacity: .75; margin-bottom: 6px; }
+.tutorial-svg { width: min(100%, 340px); height: auto; display: block; }
+.practice-grid { width: min(100%, 260px); }
+.drawing-hint { font-weight: 800; font-size: 14px; padding: 4px 12px; border: 2px dashed var(--grid-preview); border-radius: 999px; background: var(--grid-paper); color: var(--grid-ink); margin: 0 auto 6px; width: fit-content; }
