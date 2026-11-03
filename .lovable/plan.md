@@ -1,44 +1,35 @@
-# Reconstrução do material "Malhas Quadriculadas com Akemi"
+# Demonstração de como desenhar na malha
 
-Como o `.fla` é binário do Adobe Animate e não pode ser editado aqui, vamos reconstruir o material como aplicação web moderna em React/TypeScript, mantendo fielmente o visual e o fluxo do original.
+Sem alterar figuras, gabaritos, validação, fatores de escala, círculos fixos ou progressão.
 
-## Telas
+## 1. Demonstração em etapas (ScaleDemonstration)
+A janela de exemplo passa a ter três etapas curtas, com indicador "1 de 3" e PULAR EXEMPLO sempre visível:
 
-1. **Intro (`/`)** — Personagem Akemi com balão de fala ("Olá, amigos! Eu sou a Akemi…"), fundo azul com raios, botão **CONTINUAR** no canto inferior direito.
-2. **Menu (`/menu`)** — Akemi sorrindo, fundo verde com raios, cartaz com 6 figuras clicáveis: **Peixe, Casa, Barco, Árvore, Caminhão, Flor**. Botão **VOLTAR** no topo.
-3. **Atividade (`/desenhar/$figura`)** — Layout em 3 áreas:
-   - Painel esquerdo: ícones de **lápis**, **desfazer**, **apagar tudo**
-   - Painel direito superior: malha quadriculada vazia (colunas a–j, linhas 1–7) onde o aluno desenha
-   - Painel direito inferior: malha de referência com a figura-gabarito desenhada
-   - Botão **VOLTAR** (inferior esquerdo) e **VERIFICAR** (inferior direito)
+1. **Escala** (atual, ajustada): duas malhas de exemplo; o quadrado não aparece pronto — ele é traçado na nova malha durante a animação, com a frase "Você vai desenhar a figura na nova malha". Ampliar e reduzir continuam separados.
+2. **COMO DESENHAR NA MALHA**: malha de exemplo própria (não a da atividade), com cursor animado em três ações e a fala da Mila correspondente:
+   - escolher um cruzamento (ponto destacado);
+   - clicar em outro ponto (linha aparece);
+   - ligar mais um ponto, depois clicar num botão LÁPIS ilustrado e iniciar um trecho separado.
+   Controles REPRODUZIR / PAUSAR / PRÓXIMO. Com movimento reduzido, cada ação aparece como quadro estático com botões anterior/próximo.
+3. **Agora é sua vez!**: pequena malha interativa usando o mesmo componente de desenho da atividade (mouse, toque e teclado). Ao formar o primeiro segmento: "Isso! Agora você já sabe como começar!" com PRATICAR NOVAMENTE e COMEÇAR A ATIVIDADE. A prática não é obrigatória.
 
-## Como funciona a atividade
+Os traços da prática ficam só dentro da janela — nunca entram no desenho real nem no progresso.
 
-- **Desenho por vértices**: o aluno clica em pontos da grade (interseções). Cada par de cliques consecutivo forma um segmento reto. Pode-se manter encadeamento (último ponto vira início do próximo segmento) até o aluno clicar no ícone de lápis para "levantar".
-- **Desfazer** remove o último segmento.
-- **Apagar tudo** limpa a malha.
-- **Verificar**: compara o conjunto de segmentos do aluno com o gabarito normalizado (segmentos não-direcionados). Mostra modal com:
-  - ✅ "Parabéns!" se todos os segmentos batem
-  - ❌ Mensagem amigável com contagem de acertos/erros se diverge
+## 2. Dicas na primeira atividade
+Faixa discreta acima da malha de desenho, apenas na primeira atividade da sessão:
+- antes do primeiro clique: "Clique em um cruzamento para começar."
+- após o primeiro ponto: "Agora escolha outro ponto para formar uma linha."
+- após o primeiro segmento: "Continue ligando os pontos do desenho." (some após mais alguns traços)
 
-## Estrutura técnica
+Lembrada por sessão (como as demonstrações), sem repetir nas demais figuras. VER EXEMPLO continua disponível.
 
-- **Rotas** (TanStack Start): `src/routes/index.tsx` (intro), `src/routes/menu.tsx`, `src/routes/desenhar.$figura.tsx`
-- **Componentes**: `AkemiCharacter`, `SpeechBubble`, `RayBackground` (azul/verde), `DrawingGrid` (SVG interativo), `ReferenceGrid`, `ToolPanel`, `VerifyModal`
-- **Dados**: `src/data/figuras.ts` — cada figura tem nome, ícone do menu, e array de segmentos `[{from:[col,row], to:[col,row]}]` que descreve o gabarito (peixe, casa, barco, árvore, caminhão, flor)
-- **Assets**: Akemi e ícones (lápis, seta desfazer, borracha, botões VOLTAR/CONTINUAR/VERIFICAR) gerados via `imagegen` em estilo cartoon infantil próximo ao original. Fundo de raios em CSS puro (gradiente cônico).
-- **SVG grid**: renderiza linhas da malha, rótulos a–j / 1–7, snap dos cliques no vértice mais próximo, segmentos desenhados como `<line>`. Hover destaca o vértice.
-- **Estilo**: paleta fiel — ciano (#7dd3e0) para intro, verde (#a8e063) para menu, branco para malhas, contornos pretos espessos estilo cartoon.
+## 3. Verificação
+- Testes novos: estado das dicas (sequência e não repetição) e garantia de que a prática não altera progresso.
+- Rodar todos os testes existentes.
+- Navegador: figura → transformação → escala → como desenhar → prática → desenho → verificar, em 1200×675 sem rolagem, com teclado e com movimento reduzido.
 
-## Entregáveis
-
-- App funcional com 6 figuras jogáveis
-- Visual fiel ao original (Akemi, raios, balões, botões arredondados estilo "cartoon")
-- Validação automática do desenho contra o gabarito
-- Responsivo (funciona em tablet/desktop)
-
-## O que NÃO está incluso
-
-- Áudio/narração (o original parece não ter)
-- Animações da Akemi (fica estática — uma pose para intro, outra para menu)
-- Edição do `.fla` original (impossível sem Adobe Animate)
+## Detalhes técnicos
+- Novo `DrawingTutorial.tsx` (etapa animada, SVG próprio) e `DrawingPractice.tsx` (reusa `DrawingGrid` com estado local).
+- Novo `src/lib/drawing-hints.ts` (+ teste) com chave em sessionStorage, separado do progresso.
+- `desenhar.$figura.tsx`: renderiza a faixa de dicas; sem mudar comparar/desafios.
+- Atualizar AGENTS.md e roadmap.md.
