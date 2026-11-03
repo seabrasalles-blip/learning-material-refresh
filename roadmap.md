@@ -2,10 +2,10 @@
 
 # Mila visual and navigation refactor
 
-- [ ] Import supplied transparent poses and backgrounds without modification.
-- [ ] Build cohesive cover, introduction, selection screens and consistent navigation.
-- [ ] Refine optional demonstration, activity and success/retry feedback; add conclusion.
-- [ ] Verify geometry tests and full drawing-to-conclusion flow on desktop and mobile.
+- [x] Import supplied transparent poses and backgrounds without modification; use the text-free background for live screens.
+- [x] Build cohesive cover, introduction, selection screens and consistent navigation.
+- [x] Refine optional demonstration, activity and success/retry feedback; add conclusion.
+- [x] Verify geometry tests and full drawing-to-conclusion flow on desktop and mobile.
 
 - [x] Add explicit fixed circular geometry and inspect available video reference.
 - [x] Add figure-first mode selection and exact scale/position challenges.
