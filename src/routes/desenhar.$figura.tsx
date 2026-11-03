@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { RayBackground } from "@/components/RayBackground";
+import { createFileRoute, notFound, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Check, Play, Home } from "lucide-react";
+import { LearningScreen } from "@/components/LearningScreen";
+import { LearningDialog } from "@/components/LearningDialog";
+import { Mila } from "@/components/Mila";
 import { ReferenceGrid } from "@/components/ReferenceGrid";
 import { DrawingGrid } from "@/components/DrawingGrid";
 import { ToolPanel } from "@/components/ToolPanel";
@@ -12,9 +15,9 @@ import { criarDesafio } from "@/data/desafios";
 export const Route = createFileRoute("/desenhar/$figura")({
   validateSearch: (search: Record<string, unknown>): { modo: Modo } => ({ modo: search.modo === "ampliar" ? "ampliar" : "reduzir" }),
   head: ({ params }) => ({ meta: [
-    { title: `Desenhar ${FIGURAS[params.figura]?.nome ?? "figura"} — Malhas com Akemi` },
+    { title: `Desenhar ${FIGURAS[params.figura]?.nome ?? "figura"} — Malhas com Mila` },
     { name: "description", content: "Desenhe a figura ampliada ou reduzida na malha quadriculada e confira sua transformação." },
-    { property: "og:title", content: `Desenhar ${FIGURAS[params.figura]?.nome ?? "figura"} — Malhas com Akemi` },
+    { property: "og:title", content: `Desenhar ${FIGURAS[params.figura]?.nome ?? "figura"} — Malhas com Mila` },
     { property: "og:description", content: "Pratique ampliação e redução com verificação matemática." },
     { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" },
   ] }),
@@ -29,6 +32,7 @@ function Desenhar() {
 }
 function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const figura = FIGURAS[id];
+  const navigate = useNavigate();
   const [segmentos, setSegmentos] = useState<Segmento[]>([]);
   const [pending, setPending] = useState<Vertex | null>(null);
   const [resultado, setResultado] = useState<ReturnType<typeof comparar> | null>(null);
@@ -44,8 +48,8 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     try { sessionStorage.setItem("akemi-example-seen", "yes"); } catch { /* Session preference is optional. */ }
   };
   const changed = () => { setPending(null); setResultado(null); };
-  return <RayBackground variant="blue" soft>
-    <main className="activity-main">
+  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); setResultado(comparar(segmentos, desafio.resposta.segmentos)); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+    <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
         <p className="font-bold">{modo === "ampliar" ? "Desenhe com o dobro da medida de cada lado." : "Desenhe com metade da medida de cada lado."}</p>
@@ -57,22 +61,20 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
           <div className="activity-tools"><ToolPanel pencilActive onPencil={() => setPending(null)} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setSegmentos([]); changed(); }} /></div>
         </section>
       </div>
-      <div className="activity-actions">
-        <Link to="/escolher/$figura" params={{ figura: id }}><CartoonButton>VOLTAR</CartoonButton></Link>
-        <CartoonButton onClick={() => { setPending(null); setExample(true); }}>VER EXEMPLO</CartoonButton>
-        <CartoonButton onClick={() => { setPending(null); setResultado(comparar(segmentos, desafio.resposta.segmentos)); }}>VERIFICAR</CartoonButton>
-      </div>
       {example && <ScaleDemonstration modo={modo} onContinue={resume} />}
-      {resultado && <div className="activity-modal"><section className="activity-dialog" style={{ maxWidth: 440 }} role="dialog" aria-modal="true" aria-labelledby="result-title">
-        <h2 id="result-title" className="text-2xl font-extrabold mb-3">{resultado.completo ? "Parabéns!" : "Quase lá!"}</h2>
-        {resultado.completo ? <p>Seu desenho está perfeito!</p> : <>
-          <p>Acertos: <strong>{resultado.acertos}</strong> de <strong>{resultado.total}</strong></p>
-          {resultado.faltando > 0 && <p>Faltam {resultado.faltando} trecho(s).</p>}
-          {resultado.errados > 0 && <p>Há {resultado.errados} trecho(s) incorreto(s) ou a mais.</p>}
-          <p className="mt-3">Tente de novo!</p>
-        </>}
-        <div className="example-controls"><CartoonButton onClick={() => setResultado(null)}>CONTINUAR</CartoonButton>{resultado.completo && <Link to="/menu"><CartoonButton tone="green">MENU</CartoonButton></Link>}</div>
-      </section></div>}
-    </main>
-  </RayBackground>;
+      {resultado && !example && <LearningDialog title={resultado.completo ? "Muito bem!" : "Quase lá!"} onClose={() => setResultado(null)} className="feedback-dialog">
+        <Mila pose={resultado.completo ? "celebrating" : "encouraging"} className="feedback-mila" />
+        <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : "Observe o modelo e tente novamente."}</p>
+        {!resultado.completo && <p className="feedback-count">Acertos: {resultado.acertos} de {resultado.total}{resultado.faltando > 0 && ` · Faltam ${resultado.faltando} trecho(s)`}{resultado.errados > 0 && ` · ${resultado.errados} trecho(s) a mais ou incorreto(s)`}</p>}
+        <div className="example-controls">{resultado.completo ? <>
+          <CartoonButton tone="pink" onClick={() => navigate({ to: "/conclusao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
+          <CartoonButton onClick={() => navigate({ to: "/menu" })}>ESCOLHER OUTRA FIGURA</CartoonButton>
+          <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
+        </> : <>
+          <CartoonButton tone="pink" onClick={() => setResultado(null)}>TENTAR NOVAMENTE</CartoonButton>
+          <CartoonButton onClick={() => { setResultado(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
+        </>}</div>
+      </LearningDialog>}
+    </div>
+  </LearningScreen>;
 }
