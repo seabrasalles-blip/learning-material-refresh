@@ -1,6 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { drawingHint, markDrawingHintsDone, shouldShowDrawingHints } from "./drawing-hints";
-import { readProgress } from "./session-progress";
 
 const store = new Map<string, string>();
 beforeEach(() => {
@@ -22,6 +21,6 @@ describe("drawing hints", () => {
   });
   it("does not touch student progress", () => {
     markDrawingHintsDone();
-    expect(readProgress()).toEqual([]);
+    expect(store.has("mila-transformations")).toBe(false);
   });
 });
