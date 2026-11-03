@@ -1,5 +1,10 @@
 # Pedagogical refactor
 
+# Segment correction and contextual feedback
+- [ ] Add individual erasing, active tool states and confirmed clear-all.
+- [ ] Return missing/excess coverage and contextual guidance without revealing answers.
+- [ ] Improve crossing visibility; run existing tests and verify correcting the first house stroke in the browser.
+
 # Final pre-DI revision
 
 - [x] Correct seven cell rows while preserving border vertices and scale.

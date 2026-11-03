@@ -37,18 +37,44 @@ function coverage(segments: Segmento[]) {
 }
 
 function uncovered(a: Interval[], b: Interval[]) {
-  let gaps = 0;
+  return difference(a, b).length;
+}
+
+function difference(a: Interval[], b: Interval[]): Interval[] {
+  const gaps: Interval[] = [];
   for (const [start, end] of a) {
     let cursor = start;
     for (const [left, right] of b) {
       if (right <= cursor + EPS || left >= end - EPS) continue;
-      if (left > cursor + EPS) gaps++;
+      if (left > cursor + EPS) gaps.push([cursor, Math.min(left, end)]);
       cursor = Math.max(cursor, right);
       if (cursor >= end - EPS) break;
     }
-    if (cursor < end - EPS) gaps++;
+    if (cursor < end - EPS) gaps.push([cursor, end]);
   }
   return gaps;
+}
+
+function missingSegments(source: Segmento[], target: Map<string, Interval[]>): Segmento[] {
+  const merged = coverage(source);
+  const result: Segmento[] = [];
+  for (const [key, intervals] of merged) {
+    const sample = source.find(s => line(s)?.key === key);
+    if (!sample) continue;
+    const [[ax, ay], [bx, by]] = sample;
+    const length = Math.hypot(bx - ax, by - ay);
+    const sign = bx < ax || (Math.abs(bx - ax) < EPS && by < ay) ? -1 : 1;
+    const dx = sign * (bx - ax) / length;
+    const dy = sign * (by - ay) / length;
+    const projection = ax * dx + ay * dy;
+    for (const [start, end] of difference(intervals, target.get(key) ?? [])) {
+      result.push([
+        [rounded(ax + (start - projection) * dx), rounded(ay + (start - projection) * dy)],
+        [rounded(ax + (end - projection) * dx), rounded(ay + (end - projection) * dy)],
+      ]);
+    }
+  }
+  return result;
 }
 
 export function comparar(usuario: Segmento[], gabarito: Segmento[]) {
@@ -63,5 +89,6 @@ export function comparar(usuario: Segmento[], gabarito: Segmento[]) {
     const l = line(s);
     return l && uncovered([l.interval], user.get(l.key) ?? []) === 0;
   }).length;
-  return { acertos, faltando, errados, total: unique.length, completo: faltando === 0 && errados === 0 };
+  return { acertos, faltando, errados, total: unique.length, completo: faltando === 0 && errados === 0,
+    trechosAusentes: missingSegments(gabarito, user), trechosIncorretos: missingSegments(usuario, answer) };
 }
