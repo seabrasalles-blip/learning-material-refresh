@@ -17,7 +17,7 @@ Modelo e gabarito continuam derivados do mesmo objeto `Figura`: não há correç
 
 - Os vértices dos segmentos recuperados estão nas interseções identificáveis das capturas.
 - **Maçaneta do caminhão:** pequeno traço preto horizontal entre g e h, perto da linha 5. Suas extremidades não coincidem claramente com vértices da grade; foi omitido do modelo e do gabarito, sem inventar coordenadas selecionáveis.
-- As rodas e vigias não estão centradas em interseções inteiras. Centros e raios em unidades de célula foram medidos visualmente na captura rasterizada: rodas `[3.5,7]`, `[8.2,7]`, raio `0.85`; vigias `[2.5…6.5,6.5]`, raio `0.2`. O olho permanece `[4,3]`, raio `0.3`. São aproximações rasterizadas, não medidas do FLA. Espessura dos contornos e raios exatos não são certificados.
+- As rodas e vigias não estão centradas em interseções inteiras. Centros e raios em unidades de célula foram medidos visualmente na captura rasterizada: rodas `[3.5,7]`, `[8.2,7]`, raio `0.85`; vigias `[3.5…7.5,6.5]`, raio `0.2`. O olho permanece `[4,3]`, raio `0.3`. São aproximações rasterizadas, não medidas do FLA. Espessura dos contornos e raios exatos não são certificados.
 - As linhas grossas na linha 7 de degraus, barco e casa foram mantidas como parte visível do desenho. A imagem isolada não permite certificar se o Flash as tratava como desenho do aluno ou guia fornecida; nesta versão entram no gabarito de segmentos.
 
 ## Assets e progressão
@@ -34,4 +34,8 @@ Modelo e gabarito continuam derivados do mesmo objeto `Figura`: não há correç
 
 ## Verificação
 
-Resultados efetivamente executados serão registrados após os testes e a navegação completa.
+- Vitest: **37 testes passaram** (31 de geometria e 6 de progressão). Cobrem fatores, coordenadas compartilhadas, limites dos círculos, contornos recuperados, cobertura invertida/subdividida, faltas e excessos, conclusão com ambos os modos e preservação de acertos.
+- Navegador: os **12 desafios** foram desenhados por cliques reais e aprovados. Desfazer e Apagar preservaram todos os círculos fixos; rever o exemplo manteve os segmentos do aluno.
+- Percurso real: capa → apresentação → figura → reduzir → exemplo → tentativa vazia rejeitada → acerto → transição → escolha de outra figura → recarregar com progresso preservado → acesso direto à conclusão bloqueado → ampliar outra figura → conclusão comemorativa.
+- Todas as 12 atividades apresentaram altura de página ≤ 675 px e largura ≤ 1200 px em **1200 × 675**, com os botões visíveis. Menu em **390 × 844** sem transbordamento horizontal.
+- Capturas de capa, menu, atividades, transição e conclusão inspecionadas visualmente. Nenhum erro de execução observado; compilação automática sem erros.

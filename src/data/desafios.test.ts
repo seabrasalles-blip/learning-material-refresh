@@ -54,6 +54,7 @@ it("boat preserves separate sails, mast and five fixed filled portholes", () => 
   for (const line of [[[6,1],[5,6]], [[6,1],[6,6]], [[6,2],[9,5]]] as Segmento[]) expect(FIGURAS.barco.segmentos).toContainEqual(line);
   expect(FIGURAS.barco.circulos).toHaveLength(5);
   expect(FIGURAS.barco.circulos?.every(c => c.preenchido)).toBe(true);
+  expect(FIGURAS.barco.circulos?.map(c => c.centro)).toEqual([[3.5,6.5],[4.5,6.5],[5.5,6.5],[6.5,6.5],[7.5,6.5]]);
 });
 it("truck retains the slanted body and internal straight divisions", () => {
   for (const line of [[[1,4],[3,2]], [[4,2],[4,4]], [[5,2],[5,4]], [[6,2],[6,4]], [[8,3],[8,5]]] as Segmento[]) expect(FIGURAS.caminhao.segmentos).toContainEqual(line);
