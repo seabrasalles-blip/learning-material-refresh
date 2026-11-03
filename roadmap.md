@@ -1,5 +1,13 @@
 # Pedagogical refactor
 
+# Final pre-DI revision
+
+- [ ] Correct seven cell rows while preserving border vertices and scale.
+- [ ] Remember demonstrations independently by mode; reset the journey explicitly on replay.
+- [ ] Provide a visible keyboard-accessible cover control and keyboard drawing.
+- [ ] Evaluate the fixed truck handle against the supplied capture.
+- [ ] Test all twelve challenges and controls at 1200 × 675 and 1920 × 1080; report results and remaining uncertainties.
+
 # Mila visual and navigation refactor
 
 - [x] Import supplied transparent poses and backgrounds without modification; use the text-free background for live screens.
