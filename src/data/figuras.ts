@@ -104,11 +104,11 @@ export const FIGURAS: Record<string, Figura> = {
   barco: {
     id: "barco", nome: "Barco", cols: 10, rows: 8,
     circulos: [
-      { id: "vigia-0", centro: [2.5, 6.5], raio: 0.2, preenchido: true },
-      { id: "vigia-1", centro: [3.5, 6.5], raio: 0.2, preenchido: true },
-      { id: "vigia-2", centro: [4.5, 6.5], raio: 0.2, preenchido: true },
-      { id: "vigia-3", centro: [5.5, 6.5], raio: 0.2, preenchido: true },
-      { id: "vigia-4", centro: [6.5, 6.5], raio: 0.2, preenchido: true },
+      { id: "vigia-0", centro: [3.5, 6.5], raio: 0.2, preenchido: true },
+      { id: "vigia-1", centro: [4.5, 6.5], raio: 0.2, preenchido: true },
+      { id: "vigia-2", centro: [5.5, 6.5], raio: 0.2, preenchido: true },
+      { id: "vigia-3", centro: [6.5, 6.5], raio: 0.2, preenchido: true },
+      { id: "vigia-4", centro: [7.5, 6.5], raio: 0.2, preenchido: true },
     ],
     segmentos: [
       f([1, 5], [6, 1]),
