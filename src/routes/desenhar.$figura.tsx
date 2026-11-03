@@ -15,6 +15,7 @@ import { completeActivity, journeyComplete } from "@/lib/session-progress";
 import { markDemonstrationSeen, shouldShowDemonstration } from "@/lib/demonstration-session";
 import { eraseSegment } from "@/lib/segment-tools";
 import { orientacao } from "@/data/orientacao";
+import { drawingHint, markDrawingHintsDone, shouldShowDrawingHints, HINT_SEGMENTS_TO_FINISH } from "@/lib/drawing-hints";
 
 export const Route = createFileRoute("/desenhar/$figura")({
   validateSearch: (search: Record<string, unknown>): { modo: Modo } => ({ modo: search.modo === "ampliar" ? "ampliar" : "reduzir" }),
@@ -43,9 +44,13 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const [example, setExample] = useState(false);
   const [pencilActive, setPencilActive] = useState(true);
   const [confirmClear, setConfirmClear] = useState(false);
+  const [hints, setHints] = useState(false);
   useEffect(() => {
     setExample(shouldShowDemonstration(modo));
+    setHints(shouldShowDrawingHints());
   }, [modo]);
+  useEffect(() => { if (hints && segmentos.length >= HINT_SEGMENTS_TO_FINISH) { markDrawingHintsDone(); setHints(false); } }, [hints, segmentos.length]);
+  const hint = hints && pencilActive ? drawingHint(pending, segmentos.length) : null;
   if (!figura) throw notFound();
   const desafio = criarDesafio(figura, modo);
   const resume = () => {
@@ -62,6 +67,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
       <div className="activity-boards">
         <section className="activity-board" aria-label="Modelo"><h2>Modelo</h2><ReferenceGrid figura={desafio.modelo} cell={desafio.cellModelo} /></section>
         <section className="activity-board" aria-label="Desenho do aluno"><h2>Desenhe aqui</h2>
+          {hint && <p className="drawing-hint" role="status">{hint}</p>}
           <DrawingGrid cols={desafio.resposta.cols} rows={desafio.resposta.rows} cell={desafio.cellResposta} segmentos={segmentos} circulos={desafio.resposta.circulos} pendingFrom={pending} toolActive={pencilActive} onEraseSegment={index => { setSegmentos(s => eraseSegment(s, index)); changed(); }} onAddSegment={s => { setSegmentos(prev => [...prev, s]); setResultado(null); }} onSetPending={setPending} />
           <div className="activity-tools"><ToolPanel pencilActive={pencilActive} onPencil={() => { setPencilActive(true); setPending(null); }} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setPencilActive(false); changed(); }} onClear={() => { if (segmentos.length) setConfirmClear(true); else changed(); }} /></div>
         </section>

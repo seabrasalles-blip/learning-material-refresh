@@ -38,3 +38,4 @@
 - [x] Update Akemi demonstration to show two grids with different cell sizes.
 - [x] Keep fixed circles pre-drawn on the response grid, radius in cell units.
 - [x] Update tests and re-verify all twelve challenges in the browser at 1200 × 675.
+- [x] Demonstração de como desenhar na malha (tutorial, prática, dicas da primeira atividade)
