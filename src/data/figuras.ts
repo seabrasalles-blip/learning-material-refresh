@@ -29,7 +29,7 @@ const f = (a: Vertex, b: Vertex): Segmento => [a, b];
 // See AUDITORIA.md for non-grid circular measurements and the uncertain truck handle.
 export const FIGURAS: Record<string, Figura> = {
   flor: {
-    id: "flor", nome: "Flor", cols: 10, rows: 8,
+    id: "flor", nome: "Flor", cols: 10, rows: 7,
     segmentos: [
       f([5, 1], [4, 2]),
       f([5, 1], [6, 2]),
@@ -51,7 +51,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   degraus: {
-    id: "degraus", nome: "Figura em degraus", cols: 10, rows: 8,
+    id: "degraus", nome: "Figura em degraus", cols: 10, rows: 7,
     segmentos: [
       f([4, 1], [6, 1]),
       f([6, 1], [6, 2]),
@@ -83,7 +83,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   peixe: {
-    id: "peixe", nome: "Peixe", cols: 10, rows: 8,
+    id: "peixe", nome: "Peixe", cols: 10, rows: 7,
     circulos: [
       { id: "olho", centro: [4, 3], raio: 0.3 },
     ],
@@ -102,7 +102,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   barco: {
-    id: "barco", nome: "Barco", cols: 10, rows: 8,
+    id: "barco", nome: "Barco", cols: 10, rows: 7,
     circulos: [
       { id: "vigia-0", centro: [3.5, 6.5], raio: 0.2, preenchido: true },
       { id: "vigia-1", centro: [4.5, 6.5], raio: 0.2, preenchido: true },
@@ -125,7 +125,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   caminhao: {
-    id: "caminhao", nome: "Caminhão", cols: 10, rows: 8,
+    id: "caminhao", nome: "Caminhão", cols: 10, rows: 7,
     circulos: [
       { id: "roda-traseira", centro: [3.5, 7], raio: 0.85 },
       { id: "roda-dianteira", centro: [8.2, 7], raio: 0.85 },
@@ -148,7 +148,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   casa: {
-    id: "casa", nome: "Casa", cols: 10, rows: 8,
+    id: "casa", nome: "Casa", cols: 10, rows: 7,
     segmentos: [
       f([1, 3], [3, 1]),
       f([3, 1], [8, 1]),

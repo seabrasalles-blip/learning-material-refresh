@@ -36,6 +36,13 @@ export function completeActivity(completion: Completion) {
   listeners.forEach(listener => listener());
   return snapshot;
 }
+export function resetSessionProgress() {
+  snapshot = EMPTY;
+  serialized = "[]";
+  try { sessionStorage.setItem(KEY, serialized); } catch { /* Reset also works in memory. */ }
+  listeners.forEach(listener => listener());
+  return snapshot;
+}
 function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => { listeners.delete(listener); };

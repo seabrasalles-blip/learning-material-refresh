@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import type { Circulo, Segmento, Vertex } from "@/data/figuras";
+import { moveGridCursor } from "@/lib/grid-keyboard";
 
 interface Props {
   cols: number;
@@ -31,6 +32,8 @@ export function DrawingGrid({
   const h = rows * cell + pad * 2;
   const svgRef = useRef<SVGSVGElement | null>(null);
   const [hover, setHover] = useState<Vertex | null>(null);
+  const [keyboardCursor, setKeyboardCursor] = useState<Vertex>([1, 1]);
+  const [keyboardFocused, setKeyboardFocused] = useState(false);
 
   const px = (c: number) => pad + (c - 1) * cell;
   const py = (r: number) => pad + (r - 1) * cell;
@@ -68,6 +71,11 @@ export function DrawingGrid({
     if (!p) return;
     const v = nearestVertex(p.x, p.y);
     if (!v) return;
+    setKeyboardCursor(v);
+    selectVertex(v);
+  }
+
+  function selectVertex(v: Vertex) {
     if (!pendingFrom) {
       onSetPending(v);
       return;
@@ -85,6 +93,24 @@ export function DrawingGrid({
     <svg
       ref={svgRef}
       aria-label="Malha de resposta"
+      aria-description={`Use as setas para mover entre cruzamentos, Enter ou espaço para selecionar e Escape para cancelar o ponto inicial. Ponto atual: coluna ${keyboardCursor[0]}, linha de coordenada ${keyboardCursor[1]}.`}
+      role="group"
+      tabIndex={toolActive ? 0 : -1}
+      className="drawing-grid"
+      onFocus={() => setKeyboardFocused(true)}
+      onBlur={() => setKeyboardFocused(false)}
+      onKeyDown={e => {
+        if (!toolActive) return;
+        if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(e.key)) {
+          e.preventDefault();
+          const next = moveGridCursor(keyboardCursor, e.key, cols, rows);
+          setKeyboardCursor(next); setHover(next);
+        } else if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault(); selectVertex(keyboardCursor);
+        } else if (e.key === "Escape") {
+          e.preventDefault(); onSetPending(null);
+        }
+      }}
       data-drawing-grid="true"
       viewBox={`0 0 ${w} ${h}`}
       onMouseMove={handleMove}
@@ -155,6 +181,7 @@ export function DrawingGrid({
       {hover && (
         <circle cx={px(hover[0])} cy={py(hover[1])} r={5} fill="var(--grid-preview)" opacity={0.5} />
       )}
+      {keyboardFocused && <circle data-keyboard-cursor="true" cx={px(keyboardCursor[0])} cy={py(keyboardCursor[1])} r={8} fill="none" stroke="var(--grid-preview)" strokeWidth={3} />}
     </svg>
   );
 }

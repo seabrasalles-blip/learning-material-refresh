@@ -6,4 +6,7 @@
 - Keep original figure coordinates immutable; model and response grids share the same coordinates, columns and rows — the scale factor applies only to the physical cell size (CELL_BASE in src/data/desafios.ts), never to the vertices.
 - Validate line coverage with merged collinear intervals, not segment counts, so subdivision and drawing direction do not affect correctness.
 - Keep fixed circles separate from student segment state, so drawing tools cannot delete supplied geometry.
-- Remember demonstration viewing only for the current browser session; this is presentation state, not stored student progress.
+- Remember demonstration viewing independently per mode only for the current browser session; this presentation state is separate from student progress and is not cleared by journey replay.
+- Model seven cell rows and eight selectable vertex rows in both SVG grids; shared immutable figure data keeps labels and border endpoints consistent.
+- Keep keyboard and pointer input on the same vertex-selection path, with a bounded keyboard cursor, so snapping and geometric validation cannot diverge.
+- Reset the shared session progress explicitly for journey replay; figure exploration must never reset it.

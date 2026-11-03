@@ -42,6 +42,16 @@ it("fish supplies one eye and truck two named wheels", () => {
   expect(FIGURAS.peixe.circulos?.map(c => c.id)).toEqual(["olho"]);
   expect(FIGURAS.caminhao.circulos?.map(c => c.id)).toEqual(["roda-traseira", "roda-dianteira"]);
 });
+it("all six grids have seven numbered rows and preserve the bottom vertex at coordinate eight", () => {
+  expect(FIGURAS_LIST.map(f => f.rows)).toEqual([7, 7, 7, 7, 7, 7]);
+  expect(FIGURAS.flor.segmentos).toContainEqual([[5, 1], [5, 8]]);
+  for (const figura of FIGURAS_LIST) for (const segmento of figura.segmentos) for (const [col, row] of segmento) {
+    expect(col).toBeGreaterThanOrEqual(1);
+    expect(col).toBeLessThanOrEqual(figura.cols + 1);
+    expect(row).toBeGreaterThanOrEqual(1);
+    expect(row).toBeLessThanOrEqual(figura.rows + 1);
+  }
+});
 it("restores the six original figures, with steps rather than a substitute tree", () => {
   expect(FIGURAS_LIST.map(f => f.id)).toEqual(["flor", "degraus", "peixe", "barco", "caminhao", "casa"]);
 });

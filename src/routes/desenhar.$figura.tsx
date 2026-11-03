@@ -12,6 +12,7 @@ import { ScaleDemonstration } from "@/components/ScaleDemonstration";
 import { FIGURAS, comparar, type Modo, type Segmento, type Vertex } from "@/data/figuras";
 import { criarDesafio } from "@/data/desafios";
 import { completeActivity, journeyComplete } from "@/lib/session-progress";
+import { markDemonstrationSeen, shouldShowDemonstration } from "@/lib/demonstration-session";
 
 export const Route = createFileRoute("/desenhar/$figura")({
   validateSearch: (search: Record<string, unknown>): { modo: Modo } => ({ modo: search.modo === "ampliar" ? "ampliar" : "reduzir" }),
@@ -39,21 +40,20 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const [resultado, setResultado] = useState<ReturnType<typeof comparar> | null>(null);
   const [example, setExample] = useState(false);
   useEffect(() => {
-    try { setExample(sessionStorage.getItem("akemi-example-seen") !== "yes"); }
-    catch { setExample(true); }
-  }, []);
+    setExample(shouldShowDemonstration(modo));
+  }, [modo]);
   if (!figura) throw notFound();
   const desafio = criarDesafio(figura, modo);
   const resume = () => {
     setExample(false);
-    try { sessionStorage.setItem("akemi-example-seen", "yes"); } catch { /* Session preference is optional. */ }
+    markDemonstrationSeen(modo);
   };
   const changed = () => { setPending(null); setResultado(null); };
   return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
-        <p className="font-bold">{modo === "ampliar" ? "Desenhe com o dobro da medida de cada lado." : "Desenhe com metade da medida de cada lado."}</p>
+        <p className="font-bold">Use os pontos correspondentes nas duas malhas. {modo === "ampliar" ? "Cada lado ficará com o dobro da medida." : "Cada lado ficará com metade da medida."}</p>
       </header>
       <div className="activity-boards">
         <section className="activity-board" aria-label="Modelo"><h2>Modelo</h2><ReferenceGrid figura={desafio.modelo} cell={desafio.cellModelo} /></section>
