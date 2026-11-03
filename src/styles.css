@@ -208,6 +208,8 @@
 .tool-button { width: 42px; height: 42px; min-height: 42px; padding: 0; background: var(--grid-paper); border-color: var(--mila-border); }
 .tool-button[aria-pressed='true'] { background: var(--tool-active); border-color: var(--button-cyan-ink); }
 .cartoon-button.tool-button { color: var(--button-cyan-ink); }
+.clear-drawing-button { min-height: 42px; height: 42px; padding: 0 10px; font-size: 11px; }
+.erasable-segment:focus-visible { outline: none; stroke: var(--activity-error); stroke-opacity: .25; }
 .cartoon-button.figure-option { background: var(--mila-surface); color: var(--activity-text); border-color: var(--mila-border); }
 .cartoon-button.figure-option:hover { border-color: var(--mila-highlight); }
 @media (max-width: 950px) {

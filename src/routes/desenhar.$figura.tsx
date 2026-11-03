@@ -13,6 +13,8 @@ import { FIGURAS, comparar, type Modo, type Segmento, type Vertex } from "@/data
 import { criarDesafio } from "@/data/desafios";
 import { completeActivity, journeyComplete } from "@/lib/session-progress";
 import { markDemonstrationSeen, shouldShowDemonstration } from "@/lib/demonstration-session";
+import { eraseSegment } from "@/lib/segment-tools";
+import { orientacao } from "@/data/orientacao";
 
 export const Route = createFileRoute("/desenhar/$figura")({
   validateSearch: (search: Record<string, unknown>): { modo: Modo } => ({ modo: search.modo === "ampliar" ? "ampliar" : "reduzir" }),
@@ -39,6 +41,8 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const [pending, setPending] = useState<Vertex | null>(null);
   const [resultado, setResultado] = useState<ReturnType<typeof comparar> | null>(null);
   const [example, setExample] = useState(false);
+  const [pencilActive, setPencilActive] = useState(true);
+  const [confirmClear, setConfirmClear] = useState(false);
   useEffect(() => {
     setExample(shouldShowDemonstration(modo));
   }, [modo]);
@@ -58,15 +62,21 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
       <div className="activity-boards">
         <section className="activity-board" aria-label="Modelo"><h2>Modelo</h2><ReferenceGrid figura={desafio.modelo} cell={desafio.cellModelo} /></section>
         <section className="activity-board" aria-label="Desenho do aluno"><h2>Desenhe aqui</h2>
-          <DrawingGrid cols={desafio.resposta.cols} rows={desafio.resposta.rows} cell={desafio.cellResposta} segmentos={segmentos} circulos={desafio.resposta.circulos} pendingFrom={pending} toolActive onAddSegment={s => { setSegmentos(prev => [...prev, s]); setResultado(null); }} onSetPending={setPending} />
-          <div className="activity-tools"><ToolPanel pencilActive onPencil={() => setPending(null)} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setSegmentos([]); changed(); }} /></div>
+          <DrawingGrid cols={desafio.resposta.cols} rows={desafio.resposta.rows} cell={desafio.cellResposta} segmentos={segmentos} circulos={desafio.resposta.circulos} pendingFrom={pending} toolActive={pencilActive} onEraseSegment={index => { setSegmentos(s => eraseSegment(s, index)); changed(); }} onAddSegment={s => { setSegmentos(prev => [...prev, s]); setResultado(null); }} onSetPending={setPending} />
+          <div className="activity-tools"><ToolPanel pencilActive={pencilActive} onPencil={() => { setPencilActive(true); setPending(null); }} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setPencilActive(false); changed(); }} onClear={() => { if (segmentos.length) setConfirmClear(true); else changed(); }} /></div>
         </section>
       </div>
       {example && <ScaleDemonstration modo={modo} onContinue={resume} />}
+      {confirmClear && <LearningDialog title="Limpar todo o desenho?" onClose={() => setConfirmClear(false)}>
+        <p>Todos os seus traços serão apagados. Os círculos da atividade serão mantidos.</p>
+        <div className="example-controls">
+          <CartoonButton onClick={() => setConfirmClear(false)}>CANCELAR</CartoonButton>
+          <CartoonButton tone="pink" onClick={() => { setSegmentos([]); changed(); setConfirmClear(false); }}>LIMPAR TUDO</CartoonButton>
+        </div>
+      </LearningDialog>}
       {resultado && !example && <LearningDialog title={resultado.completo ? "Muito bem!" : "Quase lá!"} onClose={() => setResultado(null)} className="feedback-dialog">
         <Mila pose={resultado.completo ? "celebrating" : "encouraging"} className="feedback-mila" />
-        <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : "Observe o modelo e tente novamente."}</p>
-        {!resultado.completo && <p className="feedback-count">Acertos: {resultado.acertos} de {resultado.total}{resultado.faltando > 0 && ` · Faltam ${resultado.faltando} trecho(s)`}{resultado.errados > 0 && ` · ${resultado.errados} trecho(s) a mais ou incorreto(s)`}</p>}
+        <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : orientacao(figura, resultado)}</p>
         <div className="example-controls">{resultado.completo ? <>
           <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo })) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
           <CartoonButton onClick={() => navigate({ to: "/menu" })}>ESCOLHER OUTRA FIGURA</CartoonButton>

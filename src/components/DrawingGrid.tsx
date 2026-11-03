@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import type { Circulo, Segmento, Vertex } from "@/data/figuras";
 import { moveGridCursor } from "@/lib/grid-keyboard";
+import { nearestSegment } from "@/lib/segment-tools";
 
 interface Props {
   cols: number;
@@ -10,6 +11,7 @@ interface Props {
   circulos?: Circulo[];
   pendingFrom: Vertex | null;
   toolActive: boolean; // when false (e.g. eraser), clicks are ignored
+  onEraseSegment?: (index: number) => void;
   onAddSegment: (s: Segmento) => void;
   onSetPending: (v: Vertex | null) => void;
 }
@@ -24,6 +26,7 @@ export function DrawingGrid({
   circulos = [],
   pendingFrom,
   toolActive,
+  onEraseSegment,
   onAddSegment,
   onSetPending,
 }: Props) {
@@ -34,6 +37,7 @@ export function DrawingGrid({
   const [hover, setHover] = useState<Vertex | null>(null);
   const [keyboardCursor, setKeyboardCursor] = useState<Vertex>([1, 1]);
   const [keyboardFocused, setKeyboardFocused] = useState(false);
+  const [eraseHover, setEraseHover] = useState<number | null>(null);
 
   const px = (c: number) => pad + (c - 1) * cell;
   const py = (r: number) => pad + (r - 1) * cell;
@@ -59,16 +63,26 @@ export function DrawingGrid({
   }
 
   function handleMove(e: React.MouseEvent<SVGSVGElement>) {
-    if (!toolActive) return;
     const p = svgPoint(e);
     if (!p) return;
+    if (!toolActive) {
+      const rect = svgRef.current?.getBoundingClientRect();
+      setEraseHover(nearestSegment(segmentos, [(p.x - pad) / cell + 1, (p.y - pad) / cell + 1], rect ? 10 * w / rect.width / cell : 0.25));
+      return;
+    }
     setHover(nearestVertex(p.x, p.y));
   }
 
   function handleClick(e: React.MouseEvent<SVGSVGElement>) {
-    if (!toolActive) return;
     const p = svgPoint(e);
     if (!p) return;
+    if (!toolActive) {
+      const rect = svgRef.current?.getBoundingClientRect();
+      const index = nearestSegment(segmentos, [(p.x - pad) / cell + 1, (p.y - pad) / cell + 1], rect ? 10 * w / rect.width / cell : 0.25);
+      if (index !== null) onEraseSegment?.(index);
+      setEraseHover(null);
+      return;
+    }
     const v = nearestVertex(p.x, p.y);
     if (!v) return;
     setKeyboardCursor(v);
@@ -93,7 +107,7 @@ export function DrawingGrid({
     <svg
       ref={svgRef}
       aria-label="Malha de resposta"
-      aria-description={`Use as setas para mover entre cruzamentos, Enter ou espaço para selecionar e Escape para cancelar o ponto inicial. Ponto atual: coluna ${keyboardCursor[0]}, linha de coordenada ${keyboardCursor[1]}.`}
+      aria-description={toolActive ? `As letras e números nomeiam as faixas; os pontos selecionáveis são os cruzamentos. Use as setas para mover entre cruzamentos, Enter ou espaço para selecionar e Escape para cancelar o ponto inicial. Ponto atual: coluna ${keyboardCursor[0]}, linha de coordenada ${keyboardCursor[1]}.` : "Borracha ativa. Selecione um traço para apagá-lo; pelo teclado, use Tab para chegar ao traço e Enter para apagar."}
       role="group"
       tabIndex={toolActive ? 0 : -1}
       className="drawing-grid"
@@ -114,13 +128,13 @@ export function DrawingGrid({
       data-drawing-grid="true"
       viewBox={`0 0 ${w} ${h}`}
       onMouseMove={handleMove}
-      onMouseLeave={() => setHover(null)}
+      onMouseLeave={() => { setHover(null); setEraseHover(null); }}
       onClick={handleClick}
       style={{
         background: "var(--grid-paper)",
         border: "3px solid var(--grid-ink)",
         borderRadius: 6,
-        cursor: toolActive ? "crosshair" : "default",
+        cursor: toolActive ? "crosshair" : "pointer",
         width: "100%",
         height: "auto",
         maxWidth: w,
@@ -145,6 +159,9 @@ export function DrawingGrid({
         </text>
       ))}
       {/* drawn segments */}
+      {toolActive && Array.from({ length: (cols + 1) * (rows + 1) }, (_, i) => (
+        <circle key={`vertex${i}`} cx={px(i % (cols + 1) + 1)} cy={py(Math.floor(i / (cols + 1)) + 1)} r={2} fill="var(--grid-line)" pointerEvents="none" />
+      ))}
       {segmentos.map((s, i) => (
         <line
           key={i}
@@ -153,16 +170,22 @@ export function DrawingGrid({
           x2={px(s[1][0])}
           y2={py(s[1][1])}
           data-student-segment="true"
-          stroke="var(--grid-ink)"
+          stroke={!toolActive && eraseHover === i ? "var(--activity-error)" : "var(--grid-ink)"}
           strokeWidth={3.5}
           strokeLinecap="round"
         />
+      ))}
+      {!toolActive && segmentos.map((s, i) => (
+        <line key={`erase${i}`} x1={px(s[0][0])} y1={py(s[0][1])} x2={px(s[1][0])} y2={py(s[1][1])}
+          stroke="transparent" strokeWidth={16} role="button" tabIndex={0} aria-label={`Apagar traço ${i + 1}`}
+          className="erasable-segment" onFocus={() => setEraseHover(i)} onBlur={() => setEraseHover(null)}
+          onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); e.stopPropagation(); onEraseSegment?.(i); setEraseHover(null); } }} />
       ))}
       {circulos.map(c => (
         <circle key={c.id} data-fixed-circle={c.id} cx={px(c.centro[0])} cy={py(c.centro[1])} r={c.raio * cell} fill={c.preenchido ? "var(--grid-ink)" : "var(--grid-paper)"} stroke="var(--grid-ink)" strokeWidth={2.5} />
       ))}
       {/* preview line from pending to hover */}
-      {pendingFrom && hover && (
+      {toolActive && pendingFrom && hover && (
         <line
           x1={px(pendingFrom[0])}
           y1={py(pendingFrom[1])}
@@ -174,14 +197,14 @@ export function DrawingGrid({
         />
       )}
       {/* pending vertex */}
-      {pendingFrom && (
+      {toolActive && pendingFrom && (
         <circle cx={px(pendingFrom[0])} cy={py(pendingFrom[1])} r={6} fill="var(--grid-pending)" stroke="var(--grid-ink)" strokeWidth={1.5} />
       )}
       {/* hover marker */}
-      {hover && (
-        <circle cx={px(hover[0])} cy={py(hover[1])} r={5} fill="var(--grid-preview)" opacity={0.5} />
+      {toolActive && hover && (
+        <circle cx={px(hover[0])} cy={py(hover[1])} r={7} fill="var(--grid-paper)" stroke="var(--grid-preview)" strokeWidth={2.5} pointerEvents="none" />
       )}
-      {keyboardFocused && <circle data-keyboard-cursor="true" cx={px(keyboardCursor[0])} cy={py(keyboardCursor[1])} r={8} fill="none" stroke="var(--grid-preview)" strokeWidth={3} />}
+      {toolActive && keyboardFocused && <circle data-keyboard-cursor="true" cx={px(keyboardCursor[0])} cy={py(keyboardCursor[1])} r={8} fill="none" stroke="var(--grid-preview)" strokeWidth={3} />}
     </svg>
   );
 }
