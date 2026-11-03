@@ -204,7 +204,7 @@ export function DrawingGrid({
       {toolActive && hover && (
         <circle cx={px(hover[0])} cy={py(hover[1])} r={7} fill="var(--grid-paper)" stroke="var(--grid-preview)" strokeWidth={2.5} pointerEvents="none" />
       )}
-      {keyboardFocused && <circle data-keyboard-cursor="true" cx={px(keyboardCursor[0])} cy={py(keyboardCursor[1])} r={8} fill="none" stroke="var(--grid-preview)" strokeWidth={3} />}
+      {toolActive && keyboardFocused && <circle data-keyboard-cursor="true" cx={px(keyboardCursor[0])} cy={py(keyboardCursor[1])} r={8} fill="none" stroke="var(--grid-preview)" strokeWidth={3} />}
     </svg>
   );
 }

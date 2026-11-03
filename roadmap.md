@@ -1,9 +1,9 @@
 # Pedagogical refactor
 
 # Segment correction and contextual feedback
-- [ ] Add individual erasing, active tool states and confirmed clear-all.
-- [ ] Return missing/excess coverage and contextual guidance without revealing answers.
-- [ ] Improve crossing visibility; run existing tests and verify correcting the first house stroke in the browser.
+- [x] Add individual erasing, active tool states and confirmed clear-all.
+- [x] Return missing/excess coverage and contextual guidance without revealing answers.
+- [x] Improve crossing visibility; run existing tests and verify correcting the first house stroke in the browser.
 
 # Final pre-DI revision
 
