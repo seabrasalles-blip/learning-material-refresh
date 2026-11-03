@@ -78,16 +78,17 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Malhas Quadriculadas com Akemi" },
-      { name: "description", content: "Atividades de ampliação e redução de figuras com Akemi." },
+      { title: "Malha Quadriculada com Mila" },
+      { name: "description", content: "Atividades de ampliação e redução de figuras com Mila." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Malhas Quadriculadas com Akemi" },
-      { property: "og:description", content: "Atividades de ampliação e redução de figuras com Akemi." },
+      { property: "og:title", content: "Malha Quadriculada com Mila" },
+      { property: "og:description", content: "Atividades de ampliação e redução de figuras com Mila." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@400;600;700;800;900&display=swap" },
       {
         rel: "stylesheet",
         href: appCss,
