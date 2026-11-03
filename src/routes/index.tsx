@@ -1,15 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
-import { LearningScreen } from "@/components/LearningScreen";
-import { Mila } from "@/components/Mila";
-import { CartoonButton } from "@/components/CartoonButton";
+import coverBackground from "@/assets/mila/fundo-capa.png.asset.json";
 import { pageMeta } from "@/lib/page-meta";
 export const Route = createFileRoute("/")({ head: () => pageMeta("Malha Quadriculada", "Amplie e reduza figuras usando a malha com Mila."), component: Cover });
 function Cover() {
  const navigate = useNavigate();
- return <LearningScreen cover><div className="cover-content">
-   <div className="cover-title"><span className="eyebrow">VAMOS DESENHAR COM A MILA</span><h1>Malha<br /><span>Quadriculada</span></h1><p>Amplie e reduza figuras<br />usando a malha</p></div>
-   <Mila pose="presenting" className="cover-mila" />
-   <CartoonButton tone="pink" className="cover-start" onClick={() => navigate({ to: "/apresentacao" })}>COMEÇAR <ArrowRight size={23} /></CartoonButton>
- </div></LearningScreen>;
+ return <main className="cover-stage">
+   <div className="cover-frame">
+     <img src={coverBackground.url} alt="Malha Quadriculada — Amplie e reduza figuras usando a malha. Mila apresenta um peixe desenhado em uma malha pequena e depois em uma malha maior." className="cover-art" />
+     <button type="button" className="cover-hotspot" aria-label="Começar" onClick={() => navigate({ to: "/apresentacao" })} />
+   </div>
+ </main>;
 }

@@ -123,7 +123,7 @@
 
 .learning-screen { position: relative; min-height: 100svh; color: var(--activity-text); font-family: 'Nunito', sans-serif; background: var(--grid-paper); isolation: isolate; }
 .learning-background { position: absolute; inset: 0; height: 100%; width: 100%; object-fit: cover; z-index: -2; }
-.learning-screen::before { content: ''; position: absolute; inset: 0; background: var(--mila-wash); z-index: -1; }
+.learning-screen::before { content: none; }
 .learning-cover::before { background: var(--mila-wash); }
 .learning-cover .learning-background { filter: blur(18px); opacity: .18; }
 .learning-main { min-height: 100svh; max-width: 1200px; margin: auto; padding: 22px 40px; display: flex; flex-direction: column; }
@@ -324,3 +324,11 @@
     color: var(--color-foreground);
   }
 }
+
+/* Capa: arte oficial em tela cheia, botão interativo sobre o COMEÇAR desenhado */
+.cover-stage { min-height: 100svh; display: grid; place-items: center; background: var(--grid-paper); overflow: hidden; }
+.cover-frame { position: relative; width: min(100vw, calc(100svh * 16 / 9)); aspect-ratio: 16 / 9; }
+.cover-art { display: block; width: 100%; height: 100%; object-fit: contain; }
+.cover-hotspot { position: absolute; left: 41.5%; top: 82%; width: 30%; height: 13%; border: 0; border-radius: 999px; background: transparent; cursor: pointer; transition: transform .15s, box-shadow .15s; }
+.cover-hotspot:hover { transform: scale(1.03); box-shadow: 0 0 0 4px var(--mila-highlight); }
+.cover-hotspot:focus-visible { outline: 4px solid var(--mila-highlight); outline-offset: 3px; }
