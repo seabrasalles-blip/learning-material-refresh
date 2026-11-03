@@ -13,7 +13,10 @@
 - [x] Add replayable, pausable SVG demonstration.
 - [x] Preserve visual style and fit desktop activity at 1200 × 675.
 - [x] Run geometry tests and end-to-end checks for all twelve challenges; summarize limitations.
-- [ ] Replace provisional tree with original step figure and verify remaining original outlines — blocked by missing activity-level references for these figures.
+- [ ] Reconstruct six original figures from the newly supplied Flash captures, including the step figure.
+- [ ] Use the supplied cover background with real text and controls, preserving readability.
+- [ ] Require successful reduction and enlargement during the session, with a transition and guarded conclusion.
+- [ ] Verify all corrected challenges and session progression at 1200 × 675; document actual results and uncertainties.
 
 # Cell-size scaling revision
 
