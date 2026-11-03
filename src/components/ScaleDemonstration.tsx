@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import { Pause, Play, ArrowRight } from "lucide-react";
 import type { Modo } from "@/data/figuras";
 import { CartoonButton } from "./CartoonButton";
-import akemi from "@/assets/akemi-wave.png";
+import { Mila } from "./Mila";
+import { LearningDialog } from "./LearningDialog";
 
 // Duas malhas com a mesma quantidade de quadradinhos; só o tamanho físico da
 // célula muda. A malha da direita anima do tamanho da esquerda ao tamanho final.
@@ -61,24 +62,20 @@ export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinu
     setPlaying(true);
   };
   return (
-    <div className="activity-modal">
-      <section className="activity-dialog" role="dialog" aria-modal="true" aria-labelledby="example-title">
-        <h2 id="example-title" className="text-xl font-extrabold mb-3">{modo === "ampliar" ? "AMPLIAR — DOBRAR" : "REDUZIR — METADE"}</h2>
+    <LearningDialog title={modo === "ampliar" ? "Vamos ampliar ao dobro!" : "Vamos reduzir à metade!"} onClose={onContinue}>
         <div className="example-content">
-          <img src={akemi} alt="Akemi" className="example-akemi" />
-          <MiniGrid cell={modelCell} square />
-          <MiniGrid cell={cell} square />
+          <Mila pose="explaining" className="example-mila" />
+          <div className="example-grids"><div><span>Modelo</span><MiniGrid cell={modelCell} square /></div><ArrowRight size={22} /><div><span>Nova malha</span><MiniGrid cell={cell} square /></div></div>
         </div>
         <p className="font-bold my-2">{modo === "ampliar" ? "Quadradinhos menores → quadradinhos maiores" : "Quadradinhos maiores → quadradinhos menores"}</p>
         <p>{modo === "ampliar"
-          ? "Veja! As duas malhas têm os mesmos quadradinhos, mas os da direita são maiores. Desenhe a figura nos mesmos pontos: ela ficará maior!"
-          : "Veja! As duas malhas têm os mesmos quadradinhos, mas os da direita são menores. Desenhe a figura nos mesmos pontos: ela ficará menor!"}</p>
+          ? "Agora os quadradinhos da nova malha ficam maiores. Se você desenhar nos pontos correspondentes, a figura ficará maior. O desenho mantém a mesma forma!"
+          : "Veja! As duas malhas têm o mesmo desenho, mas os quadradinhos da nova malha ficam menores. Se você desenhar nos pontos correspondentes, a figura ficará menor."}</p>
         <div className="example-controls">
           <CartoonButton onClick={play} disabled={playing}><Play size={18} className="mr-1" /> REPRODUZIR</CartoonButton>
           <CartoonButton onClick={() => setPlaying(false)} disabled={!playing}><Pause size={18} className="mr-1" /> PAUSAR</CartoonButton>
           <CartoonButton tone="green" onClick={onContinue}>CONTINUAR <ArrowRight size={18} className="ml-1" /></CartoonButton>
         </div>
-      </section>
-    </div>
+      </LearningDialog>
   );
 }
