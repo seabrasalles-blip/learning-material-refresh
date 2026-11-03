@@ -2,11 +2,11 @@
 
 # Final pre-DI revision
 
-- [ ] Correct seven cell rows while preserving border vertices and scale.
-- [ ] Remember demonstrations independently by mode; reset the journey explicitly on replay.
-- [ ] Provide a visible keyboard-accessible cover control and keyboard drawing.
-- [ ] Evaluate the fixed truck handle against the supplied capture.
-- [ ] Test all twelve challenges and controls at 1200 × 675 and 1920 × 1080; report results and remaining uncertainties.
+- [x] Correct seven cell rows while preserving border vertices and scale.
+- [x] Remember demonstrations independently by mode; reset the journey explicitly on replay.
+- [x] Provide a visible keyboard-accessible cover control and keyboard drawing.
+- [x] Evaluate the fixed truck handle against the supplied capture; retain documented uncertainty rather than invent geometry.
+- [x] Test all twelve challenges and controls at 1200 × 675 and 1920 × 1080; report results and remaining uncertainties in AUDITORIA.md.
 
 # Mila visual and navigation refactor
 
