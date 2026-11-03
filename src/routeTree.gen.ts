@@ -10,6 +10,8 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApresentacaoRouteImport } from './routes/apresentacao'
+import { Route as ConclusaoRouteImport } from './routes/conclusao'
 import { Route as MenuRouteImport } from './routes/menu'
 import { Route as DesenharFiguraRouteImport } from './routes/desenhar.$figura'
 import { Route as EscolherFiguraRouteImport } from './routes/escolher.$figura'
@@ -17,6 +19,16 @@ import { Route as EscolherFiguraRouteImport } from './routes/escolher.$figura'
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApresentacaoRoute = ApresentacaoRouteImport.update({
+  id: '/apresentacao',
+  path: '/apresentacao',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConclusaoRoute = ConclusaoRouteImport.update({
+  id: '/conclusao',
+  path: '/conclusao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MenuRoute = MenuRouteImport.update({
@@ -37,12 +49,16 @@ const EscolherFiguraRoute = EscolherFiguraRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/apresentacao': typeof ApresentacaoRoute
+  '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/apresentacao': typeof ApresentacaoRoute
+  '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
@@ -50,20 +66,43 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/apresentacao': typeof ApresentacaoRoute
+  '/conclusao': typeof ConclusaoRoute
   '/menu': typeof MenuRoute
   '/desenhar/$figura': typeof DesenharFiguraRoute
   '/escolher/$figura': typeof EscolherFiguraRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
+  fullPaths:
+    | '/'
+    | '/apresentacao'
+    | '/conclusao'
+    | '/menu'
+    | '/desenhar/$figura'
+    | '/escolher/$figura'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
-  id: '__root__' | '/' | '/menu' | '/desenhar/$figura' | '/escolher/$figura'
+  to:
+    | '/'
+    | '/apresentacao'
+    | '/conclusao'
+    | '/menu'
+    | '/desenhar/$figura'
+    | '/escolher/$figura'
+  id:
+    | '__root__'
+    | '/'
+    | '/apresentacao'
+    | '/conclusao'
+    | '/menu'
+    | '/desenhar/$figura'
+    | '/escolher/$figura'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApresentacaoRoute: typeof ApresentacaoRoute
+  ConclusaoRoute: typeof ConclusaoRoute
   MenuRoute: typeof MenuRoute
   DesenharFiguraRoute: typeof DesenharFiguraRoute
   EscolherFiguraRoute: typeof EscolherFiguraRoute
@@ -76,6 +115,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/apresentacao': {
+      id: '/apresentacao'
+      path: '/apresentacao'
+      fullPath: '/apresentacao'
+      preLoaderRoute: typeof ApresentacaoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/conclusao': {
+      id: '/conclusao'
+      path: '/conclusao'
+      fullPath: '/conclusao'
+      preLoaderRoute: typeof ConclusaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/menu': {
@@ -104,6 +157,8 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApresentacaoRoute: ApresentacaoRoute,
+  ConclusaoRoute: ConclusaoRoute,
   MenuRoute: MenuRoute,
   DesenharFiguraRoute: DesenharFiguraRoute,
   EscolherFiguraRoute: EscolherFiguraRoute,
