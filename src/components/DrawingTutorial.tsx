@@ -37,6 +37,10 @@ export function DrawingTutorial({ reduced, onNext }: { reduced: boolean; onNext:
     return () => clearTimeout(t);
   }, [playing, frame]);
   const f = FRAMES[frame];
+  const manualStep = (direction: number) => {
+    setPlaying(false);
+    setFrame(x => Math.max(0, Math.min(FRAMES.length - 1, x + direction)));
+  };
   const transition = reduced ? "none" : "transform 0.8s ease-in-out";
   return <div className="tutorial-step">
     <div className="example-content">
@@ -61,11 +65,11 @@ export function DrawingTutorial({ reduced, onNext }: { reduced: boolean; onNext:
       </div>
     </div>
     <div className="example-controls">
-      <CartoonButton onClick={() => setFrame(x => Math.max(0, x - 1))} disabled={frame === 0} aria-label="Passo anterior"><ArrowLeft size={18} /></CartoonButton>
+      <CartoonButton onClick={() => manualStep(-1)} disabled={frame === 0} aria-label="Passo anterior"><ArrowLeft size={18} /></CartoonButton>
       {playing
         ? <CartoonButton onClick={() => setPlaying(false)}><Pause size={18} className="mr-1" /> PAUSAR</CartoonButton>
-        : <CartoonButton onClick={() => { if (reduced) return setFrame(x => Math.min(FRAMES.length - 1, x + 1)); if (frame >= FRAMES.length - 1) setFrame(0); setPlaying(true); }}><Play size={18} className="mr-1" /> {reduced ? "PRÓXIMO PASSO" : "REPRODUZIR"}</CartoonButton>}
-      <CartoonButton onClick={() => setFrame(x => Math.min(FRAMES.length - 1, x + 1))} disabled={frame === FRAMES.length - 1} aria-label="Próximo passo"><ArrowRight size={18} /></CartoonButton>
+        : <CartoonButton onClick={() => { if (reduced) return manualStep(1); if (frame >= FRAMES.length - 1) setFrame(0); setPlaying(true); }}><Play size={18} className="mr-1" /> {reduced ? "PRÓXIMO PASSO" : "REPRODUZIR"}</CartoonButton>}
+      <CartoonButton onClick={() => manualStep(1)} disabled={frame === FRAMES.length - 1} aria-label="Próximo passo"><ArrowRight size={18} /></CartoonButton>
       <CartoonButton tone="green" onClick={onNext}>PRÓXIMO <ArrowRight size={18} className="ml-1" /></CartoonButton>
     </div>
   </div>;
