@@ -72,3 +72,31 @@ Modelo e gabarito continuam derivados do mesmo objeto `Figura`: não há correç
 - `src/styles.css`, `AGENTS.md`, `roadmap.md`, este relatório e memória pedagógica.
 
 **Pendência única:** medidas confiáveis ou autorização de aproximação para a maçaneta fixa do caminhão. Geometria validada, escalas e identidade visual da Mila preservadas.
+
+## Revisão pontual do tutorial — 4 de novembro de 2026
+
+### Correções e limites do escopo
+
+- O quadrado do **Modelo** aparece completo antes de REPRODUZIR e permanece intacto. Apenas o quadrado da **Nova malha** é formado pela animação existente.
+- As demonstrações matemáticas continuam independentes por modo, agora com `mila-example-seen-v2-reduzir` e `mila-example-seen-v2-ampliar`. As chaves antigas não suprimem os novos exemplos.
+- `mila-drawing-tutorial-seen-v1` registra o aprendizado compartilhado das ferramentas ao sair da prática por COMEÇAR A ATIVIDADE. A prática continua opcional. PULAR EXEMPLO não registra esse aprendizado; na primeira demonstração do outro modo, o tutorial ainda será oferecido se não tiver sido concluído. Depois de concluído, o outro modo mostra somente a escala. VER EXEMPLO permite rever as três etapas manualmente.
+- Avançar e voltar manualmente em DrawingTutorial interrompem a reprodução automática, inclusive os passos com movimento reduzido.
+- DrawingPractice foi inspecionado e preservado: seus segmentos e ponto inicial são estados locais; recebe somente a ação de começar, sem acesso aos segmentos reais ou ao progresso. Não foi necessário alterá-lo.
+- Malhas, figuras, gabaritos, círculos fixos, assets, validação matemática e navegação principal não foram modificados. Os oito percursos de conteúdo conservam seus títulos e metadados próprios.
+
+### Resultados efetivamente obtidos
+
+- **`bunx vitest run`: 53 testes aprovados, sete arquivos, nenhuma falha na execução final.** Inclui três novas verificações: compatibilidade com sessões antigas, aprendizado compartilhado sem alteração de progresso e pular a escala sem registrar aprendizado das ferramentas. A primeira execução concorrente à edição ainda contou 50 testes; a execução final, após salvar todos os testes, contou 53.
+- **Compilação automática da plataforma: `build OK`**, último resultado consultado em 11:41:06 UTC. **`bun run build` não foi executado:** as instruções da plataforma proíbem a compilação manual do projeto. Portanto, não se atribui aprovação a esse comando solicitado.
+- **Navegador: percurso completo com a flor nas duas resoluções solicitadas, 1200 × 675 e 1920 × 1080:** capa → apresentação → seleção → reduzir → escala → tutorial de cliques → prática → atividade vazia rejeitada → revisão do exemplo com um traço real preservado → desenho correto aprovado → transição → ampliar (somente escala automaticamente) → desenho correto aprovado → conclusão. Quatro atividades aprovadas por cliques reais nesta revisão; não se afirma ter repetido os doze desafios.
+- Conferidos REPRODUZIR, PAUSAR, reinício da animação, PRÓXIMO, setas anterior/próximo, limites de passos, PRATICAR NOVAMENTE, COMEÇAR A ATIVIDADE, VER EXEMPLO e PULAR EXEMPLO em cada uma das três etapas. Os controles manuais permaneceram no mesmo quadro após espera de 1,7 segundo, confirmando a pausa automática.
+- A prática foi exercitada por teclado, limpa e refeita. Conferidos antes e depois: contagem dos segmentos reais inalterada e conteúdo de `mila-transformations` idêntico, tanto com atividade vazia quanto com traço real existente. A prática não entrou no desenho nem registrou acerto.
+- Sessões com as duas chaves antigas receberam o novo tutorial. Concluí-lo na redução suprimiu somente cliques/prática automáticos na ampliação; o exemplo matemático da ampliação continuou presente. Com movimento reduzido, os passos manuais funcionaram e foi possível começar sem desenhar na prática.
+- Capturas de escala, tutorial, prática e conclusão inspecionadas visualmente em ambas as resoluções. Os diálogos capturados ficaram integralmente dentro da tela e sem rolagem interna. Nenhum erro de execução foi capturado nas verificações finais.
+- **Falhas da automação inicial:** dois timeouts ao clicar antes da hidratação da capa/atividade; o roteiro foi corrigido para aguardar carregamento e navegação. A execução final completou as duas resoluções sem falhas. Nenhuma correção adicional na aplicação foi necessária por esses timeouts.
+
+### Arquivos alterados
+
+`src/components/ScaleDemonstration.tsx`, `src/components/DrawingTutorial.tsx`, `src/lib/demonstration-session.ts`, `src/lib/demonstration-session.test.ts`, `src/routes/desenhar.$figura.tsx` (somente controle de abertura do exemplo), `AGENTS.md`, `roadmap.md` e este relatório.
+
+A pendência anterior da maçaneta do caminhão permanece fora do escopo desta revisão.

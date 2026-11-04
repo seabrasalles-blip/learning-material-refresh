@@ -1,9 +1,9 @@
 # Pedagogical refactor
 
 # Focused tutorial review
-- [ ] Restore initial model square and pause automatic playback on manual steps.
-- [ ] Version mode demonstrations separately from shared tool learning; verify practice isolation.
-- [ ] Run all tests and browser flows at 1200 × 675 and 1920 × 1080; record actual verification and build limitations.
+- [x] Restore initial model square and pause automatic playback on manual steps.
+- [x] Version mode demonstrations separately from shared tool learning; verify practice isolation.
+- [x] Run all tests and browser flows at 1200 × 675 and 1920 × 1080; record actual verification and build limitations.
 
 # Segment correction and contextual feedback
 - [x] Add individual erasing, active tool states and confirmed clear-all.
