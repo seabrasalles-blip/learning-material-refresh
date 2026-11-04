@@ -60,7 +60,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     markDemonstrationSeen(modo);
   };
   const changed = () => { setPending(null); setResultado(null); };
-  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
@@ -91,7 +91,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
           <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
         </> : <>
           <CartoonButton tone="pink" onClick={() => setResultado(null)}>TENTAR NOVAMENTE</CartoonButton>
-          <CartoonButton onClick={() => { setResultado(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
+          <CartoonButton onClick={() => { setResultado(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
         </>}</div>
       </LearningDialog>}
     </div>
