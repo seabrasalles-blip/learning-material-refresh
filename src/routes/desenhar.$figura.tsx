@@ -12,7 +12,7 @@ import { ScaleDemonstration } from "@/components/ScaleDemonstration";
 import { FIGURAS, comparar, type Modo, type Segmento, type Vertex } from "@/data/figuras";
 import { criarDesafio } from "@/data/desafios";
 import { completeActivity, journeyComplete } from "@/lib/session-progress";
-import { markDemonstrationSeen, shouldShowDemonstration } from "@/lib/demonstration-session";
+import { markDemonstrationSeen, shouldShowDemonstration, shouldShowDrawingTutorial } from "@/lib/demonstration-session";
 import { eraseSegment } from "@/lib/segment-tools";
 import { orientacao } from "@/data/orientacao";
 import { drawingHint, markDrawingHintsDone, shouldShowDrawingHints, HINT_SEGMENTS_TO_FINISH } from "@/lib/drawing-hints";
@@ -42,11 +42,13 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const [pending, setPending] = useState<Vertex | null>(null);
   const [resultado, setResultado] = useState<ReturnType<typeof comparar> | null>(null);
   const [example, setExample] = useState(false);
+  const [includeDrawingTutorial, setIncludeDrawingTutorial] = useState(true);
   const [pencilActive, setPencilActive] = useState(true);
   const [confirmClear, setConfirmClear] = useState(false);
   const [hints, setHints] = useState(false);
   useEffect(() => {
     setExample(shouldShowDemonstration(modo));
+    setIncludeDrawingTutorial(shouldShowDrawingTutorial());
     setHints(shouldShowDrawingHints());
   }, [modo]);
   useEffect(() => { if (hints && segmentos.length >= HINT_SEGMENTS_TO_FINISH) { markDrawingHintsDone(); setHints(false); } }, [hints, segmentos.length]);
@@ -58,7 +60,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     markDemonstrationSeen(modo);
   };
   const changed = () => { setPending(null); setResultado(null); };
-  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
@@ -72,7 +74,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
           <div className="activity-tools"><ToolPanel pencilActive={pencilActive} onPencil={() => { setPencilActive(true); setPending(null); }} onUndo={() => { setSegmentos(s => s.slice(0, -1)); changed(); }} onErase={() => { setPencilActive(false); changed(); }} onClear={() => { if (segmentos.length) setConfirmClear(true); else changed(); }} /></div>
         </section>
       </div>
-      {example && <ScaleDemonstration modo={modo} onContinue={resume} />}
+      {example && <ScaleDemonstration modo={modo} includeDrawingTutorial={includeDrawingTutorial} onContinue={resume} />}
       {confirmClear && <LearningDialog title="Limpar todo o desenho?" onClose={() => setConfirmClear(false)}>
         <p>Todos os seus traços serão apagados. Os círculos da atividade serão mantidos.</p>
         <div className="example-controls">
@@ -89,7 +91,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
           <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
         </> : <>
           <CartoonButton tone="pink" onClick={() => setResultado(null)}>TENTAR NOVAMENTE</CartoonButton>
-          <CartoonButton onClick={() => { setResultado(null); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
+          <CartoonButton onClick={() => { setResultado(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
         </>}</div>
       </LearningDialog>}
     </div>

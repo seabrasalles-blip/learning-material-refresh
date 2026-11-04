@@ -6,6 +6,7 @@ import { Mila } from "./Mila";
 import { LearningDialog } from "./LearningDialog";
 import { DrawingTutorial } from "./DrawingTutorial";
 import { DrawingPractice } from "./DrawingPractice";
+import { markDrawingTutorialSeen } from "@/lib/demonstration-session";
 
 // Duas malhas com a mesma quantidade de quadradinhos; só o tamanho físico da
 // célula muda. A malha da direita anima do tamanho da esquerda ao tamanho final.
@@ -29,7 +30,7 @@ function MiniGrid({ cell, square, trace = 1 }: { cell: number; square: boolean; 
   );
 }
 
-export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinue: () => void }) {
+export function ScaleDemonstration({ modo, onContinue, includeDrawingTutorial = true }: { modo: Modo; onContinue: () => void; includeDrawingTutorial?: boolean }) {
   const [step, setStep] = useState(0);
   const [progress, setProgress] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -68,11 +69,11 @@ export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinu
   const titles = [modo === "ampliar" ? "Vamos ampliar ao dobro!" : "Vamos reduzir à metade!", "COMO DESENHAR NA MALHA", "Agora é sua vez!"];
   return (
     <LearningDialog title={titles[step]} onClose={onContinue} className="demo-dialog">
-      <div className="demo-topbar"><span>Etapa {step + 1} de 3</span><CartoonButton onClick={onContinue} className="skip-example"><SkipForward size={16} className="mr-1" /> PULAR EXEMPLO</CartoonButton></div>
+      <div className="demo-topbar"><span>Etapa {step + 1} de {includeDrawingTutorial ? 3 : 1}</span><CartoonButton onClick={onContinue} className="skip-example"><SkipForward size={16} className="mr-1" /> PULAR EXEMPLO</CartoonButton></div>
       {step === 0 && <>
         <div className="example-content">
           <Mila pose="explaining" className="example-mila" />
-          <div className="example-grids"><div><span>Modelo</span><MiniGrid cell={modelCell} square={progress > 0} /></div><ArrowRight size={22} /><div><span>Nova malha</span><MiniGrid cell={cell} square={trace > 0} trace={trace} /></div></div>
+          <div className="example-grids"><div><span>Modelo</span><MiniGrid cell={modelCell} square /></div><ArrowRight size={22} /><div><span>Nova malha</span><MiniGrid cell={cell} square={trace > 0} trace={trace} /></div></div>
         </div>
         <p className="font-bold my-2">{modo === "ampliar" ? "Quadradinhos menores → quadradinhos maiores" : "Quadradinhos maiores → quadradinhos menores"}</p>
         <p>{modo === "ampliar"
@@ -81,11 +82,11 @@ export function ScaleDemonstration({ modo, onContinue }: { modo: Modo; onContinu
         <div className="example-controls">
           <CartoonButton onClick={play} disabled={playing}><Play size={18} className="mr-1" /> REPRODUZIR</CartoonButton>
           <CartoonButton onClick={() => setPlaying(false)} disabled={!playing}><Pause size={18} className="mr-1" /> PAUSAR</CartoonButton>
-          <CartoonButton tone="green" onClick={() => { setPlaying(false); setStep(1); }}>PRÓXIMO <ArrowRight size={18} className="ml-1" /></CartoonButton>
+          <CartoonButton tone="green" onClick={() => { setPlaying(false); if (includeDrawingTutorial) setStep(1); else onContinue(); }}>{includeDrawingTutorial ? "PRÓXIMO" : "CONTINUAR"} <ArrowRight size={18} className="ml-1" /></CartoonButton>
         </div>
       </>}
       {step === 1 && <DrawingTutorial reduced={reduced} onNext={() => setStep(2)} />}
-      {step === 2 && <DrawingPractice onStart={onContinue} />}
+      {step === 2 && <DrawingPractice onStart={() => { markDrawingTutorialSeen(); onContinue(); }} />}
     </LearningDialog>
   );
 }
