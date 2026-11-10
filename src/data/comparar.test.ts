@@ -36,7 +36,8 @@ it("detects a correctly proportioned flower shifted by a uniform translation", (
 it("detects diagonal translations and subdivided strokes", () => {
   const flor = FIGURAS.flor.segmentos;
   const moved = shift(flor, 1, 0);
-  const subdivided = [...moved.slice(1), [[5, 2], [5, 5]], [[5, 5], [5, 9]]] as Segmento[];
+  // Stem (index 8, [6,1]→[6,8] after the shift) drawn as two collinear strokes.
+  const subdivided = [...moved.slice(0, 8), [[6, 1], [6, 4]], [[6, 4], [6, 8]], ...moved.slice(9)] as Segmento[];
   expect(translacaoUniforme(subdivided, flor)).toBe(true);
 });
 
