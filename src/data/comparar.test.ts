@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { comparar } from "./comparar";
+import { comparar, translacaoUniforme } from "./comparar";
 import { FIGURAS, type Segmento } from "./figuras";
 
 it("identifies the exact uncovered gap and excess extension", () => {
