@@ -51,7 +51,7 @@ export const FIGURAS: Record<string, Figura> = {
     ],
   },
   degraus: {
-    id: "degraus", nome: "Figura em degraus", cols: 10, rows: 7,
+    id: "degraus", nome: "Árvore", cols: 10, rows: 7,
     segmentos: [
       f([4, 1], [6, 1]),
       f([6, 1], [6, 2]),

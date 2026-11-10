@@ -92,3 +92,22 @@ export function comparar(usuario: Segmento[], gabarito: Segmento[]) {
   return { acertos, faltando, errados, total: unique.length, completo: faltando === 0 && errados === 0,
     trechosAusentes: missingSegments(gabarito, user), trechosIncorretos: missingSegments(usuario, answer) };
 }
+
+// Detects a drawing that matches the answer key after a single uniform
+// translation (same shape and proportion, only shifted on the grid).
+// Pedagogically this is NOT approved: point correspondence is required,
+// but it earns a differentiated feedback instead of the generic error.
+export function translacaoUniforme(usuario: Segmento[], gabarito: Segmento[]): boolean {
+  if (!usuario.length || !gabarito.length) return false;
+  const first = usuario[0][0];
+  for (const g of gabarito) {
+    for (const gv of g) {
+      const dx = gv[0] - first[0];
+      const dy = gv[1] - first[1];
+      if (!dx && !dy) continue;
+      const moved = usuario.map(([[ax, ay], [bx, by]]): Segmento => [[ax + dx, ay + dy], [bx + dx, by + dy]]);
+      if (comparar(moved, gabarito).completo) return true;
+    }
+  }
+  return false;
+}
