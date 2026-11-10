@@ -1,5 +1,8 @@
 # Pedagogical refactor
 
+# Mila introduction spacing
+- [x] Enlarge the supplied Mila pose and integrate the wider text and CONTINUAR; browser-verified at 1200×675 and 1366×768 without scrolling or clipping, with both navigation buttons working and no runtime errors (also checked 844×607 and 390×844).
+
 # Focused tutorial review
 - [x] Restore initial model square and pause automatic playback on manual steps.
 - [x] Version mode demonstrations separately from shared tool learning; verify practice isolation.

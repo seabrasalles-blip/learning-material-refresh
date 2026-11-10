@@ -147,12 +147,15 @@
 .cover-title p { font-size: 24px; font-weight: 700; margin-top: 24px; line-height: 1.45; }
 .cover-mila { width: 230px; height: 410px; grid-column: 2; grid-row: 1 / 3; }
 .cover-start { justify-self: start; margin-top: 26px; font-size: 19px; min-width: 200px; }
-.welcome-layout { display: flex; align-items: center; justify-content: center; gap: 65px; }
-.welcome-copy { max-width: 480px; }
-.welcome-copy h1 { margin-bottom: 22px; }
+.welcome-layout { display: flex; align-items: center; justify-content: center; gap: 36px; width: 100%; }
+.welcome-layout .mila { height: min(540px, calc(100svh - 150px)); width: auto; aspect-ratio: 19 / 34; }
+.welcome-copy { max-width: 570px; min-width: 0; }
+.welcome-copy h1 { font-size: 46px; margin-bottom: 24px; }
 .welcome-copy h1 em { font-style: normal; color: var(--mila-highlight); }
-.welcome-copy p { font-size: 19px; line-height: 1.6; margin-bottom: 16px; }
-.welcome-copy strong { font-size: 20px; }
+.welcome-copy p { font-size: 21px; line-height: 1.6; margin-bottom: 20px; }
+.welcome-copy strong { font-size: 22px; }
+.welcome-actions { margin-top: 26px; }
+.welcome-actions .cartoon-button { min-width: 190px; font-size: 17px; }
 .selection-heading { text-align: center; margin-bottom: clamp(18px, 3vh, 34px); }
 .selection-heading h1 { font-size: clamp(31px, 3vw, 46px); }
 .selection-heading p { margin-top: 12px; font-size: clamp(15px, 1.3vw, 19px); }
@@ -221,7 +224,7 @@
  .figure-layout { gap: 22px; }
  .figure-options { grid-template-columns: repeat(3, minmax(0, 150px)); gap: 12px; }
  .figure-option { height: 145px; font-size: 16px; }
- .welcome-layout { gap: 35px; }
+ .welcome-layout { gap: 28px; }
 }
 @media (max-width: 767px) {
  .learning-main { padding: 14px 16px; }
@@ -238,7 +241,10 @@
  .welcome-layout { flex-direction: column; gap: 24px; }
  .welcome-layout .mila { height: 225px; width: 125px; }
  .welcome-copy { text-align: center; }
+ .welcome-copy h1 { font-size: 31px; }
  .welcome-copy p { font-size: 17px; }
+ .welcome-copy strong { font-size: 20px; }
+ .welcome-actions { margin-top: 22px; }
  .figure-layout { flex-direction: column; gap: 22px; }
  .mila-aside { display: flex; align-items: center; gap: 16px; width: 100%; justify-content: center; }
  .mila-aside .mila { width: 60px; height: 130px; margin: 0; }
