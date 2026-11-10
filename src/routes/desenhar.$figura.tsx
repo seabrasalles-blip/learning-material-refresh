@@ -10,6 +10,7 @@ import { ToolPanel } from "@/components/ToolPanel";
 import { CartoonButton } from "@/components/CartoonButton";
 import { ScaleDemonstration } from "@/components/ScaleDemonstration";
 import { FIGURAS, comparar, type Modo, type Segmento, type Vertex } from "@/data/figuras";
+import { translacaoUniforme } from "@/data/comparar";
 import { criarDesafio } from "@/data/desafios";
 import { completeActivity, journeyComplete } from "@/lib/session-progress";
 import { markDemonstrationSeen, shouldShowDemonstration, shouldShowDrawingTutorial } from "@/lib/demonstration-session";
@@ -41,6 +42,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
   const [segmentos, setSegmentos] = useState<Segmento[]>([]);
   const [pending, setPending] = useState<Vertex | null>(null);
   const [resultado, setResultado] = useState<ReturnType<typeof comparar> | null>(null);
+  const [deslocado, setDeslocado] = useState(false);
   const [example, setExample] = useState(false);
   const [includeDrawingTutorial, setIncludeDrawingTutorial] = useState(true);
   const [pencilActive, setPencilActive] = useState(true);
@@ -59,8 +61,8 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     setExample(false);
     markDemonstrationSeen(modo);
   };
-  const changed = () => { setPending(null); setResultado(null); };
-  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+  const changed = () => { setPending(null); setResultado(null); setDeslocado(false); };
+  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setDeslocado(!result.completo && translacaoUniforme(segmentos, desafio.resposta.segmentos)); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
@@ -84,7 +86,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
       </LearningDialog>}
       {resultado && !example && <LearningDialog title={resultado.completo ? "Muito bem!" : "Quase lá!"} onClose={() => setResultado(null)} className="feedback-dialog">
         <Mila pose={resultado.completo ? "celebrating" : "encouraging"} className="feedback-mila" />
-        <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : orientacao(figura, resultado)}</p>
+        <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : deslocado ? "A forma do seu desenho está certa, mas ele está em outra posição da malha. Use os pontos correspondentes das duas malhas para desenhá-lo no lugar certo." : orientacao(figura, resultado)}</p>
         <div className="example-controls">{resultado.completo ? <>
           <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo })) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
           <CartoonButton onClick={() => navigate({ to: "/menu" })}>ESCOLHER OUTRA FIGURA</CartoonButton>
