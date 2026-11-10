@@ -100,3 +100,26 @@ Modelo e gabarito continuam derivados do mesmo objeto `Figura`: não há correç
 `src/components/ScaleDemonstration.tsx`, `src/components/DrawingTutorial.tsx`, `src/lib/demonstration-session.ts`, `src/lib/demonstration-session.test.ts`, `src/routes/desenhar.$figura.tsx` (somente controle de abertura do exemplo), `AGENTS.md`, `roadmap.md` e este relatório.
 
 A pendência anterior da maçaneta do caminhão permanece fora do escopo desta revisão.
+## Ajustes solicitados pela DI — 10 de novembro de 2026
+
+### Correções e limites do escopo
+
+- **Responsividade da seleção (páginas 1-2):** cartões, miniaturas, textos e Mila da tela de seleção agora usam `clamp()` e `minmax()` com limites mínimos e máximos. A grade 3 × 2 é preservada sempre que a largura permite; abaixo de 768 px mantém-se o layout em duas colunas já existente. As miniaturas SVG não são deformadas (escala via viewBox) e a relação 2:1/1:2 das células das malhas de atividade não foi tocada.
+- **Nome da figura (página 3):** "Figura em degraus" passa a se chamar **Árvore** apenas no rótulo apresentado e nos metadados do menu. O identificador interno `degraus`, os segmentos, os vértices e o gabarito permanecem intactos.
+- **Feedbacks de erro (página 5):** `orientacao.ts` foi reescrito para analisar a distribuição dos trechos ausentes e incorretos por região semântica da figura (pétalas/caule/folhas; telhado/janelas/porta/paredes; carroceria/cabine; velas/mastro/casco; corpo/cauda; regiões genéricas para a árvore). Situações: A — uma região ausente: "Observe a parte de cima da flor. Alguns traços ainda estão faltando."; B — duas regiões: ambas nomeadas; C — somente traços extras: orienta comparar e usar a borracha; D — desenho muito diferente (3+ trechos incorretos e menos da metade dos acertos): orientação geral de recomeço. O primeiro segmento ausente não é mais usado como referência; não há contagens técnicas nem revelação da resposta; o aluno corrige sem perder os traços certos.
+- **Desenho proporcional deslocado (página 6):** nova rotina `translacaoUniforme` em `comparar.ts` detecta quando o desenho reproduz o gabarito após um único deslocamento uniforme (inclusive com subdivisões colineares). O desenho deslocado **não é aprovado** — a correspondência de pontos continua exigida — mas recebe feedback diferenciado: "A forma do seu desenho está certa, mas ele está em outra posição da malha. Use os pontos correspondentes das duas malhas para desenhá-lo no lugar certo."
+- A sugestão da página 4 não foi implementada, conforme instrução. Malhas, gabaritos, figuras, assets, navegação e a comparação por cobertura geométrica foram preservados.
+
+### Resultados efetivamente obtidos
+
+- **`bunx vitest run`: 65 testes aprovados, oito arquivos, nenhuma falha.** Novos testes: oito de orientação (situações A-D na flor, erro localizado na casa, desenho aleatório no caminhão, menção de duas regiões) e quatro de translação uniforme (flor deslocada, translação com subdivisão, rejeição de deformação, rejeição de desenho parcial/vazio).
+- **Compilação automática da plataforma: `build OK`** às 10:28:26 UTC. `bun run build` não foi executado: a plataforma proíbe a compilação manual do projeto.
+- **Navegador — menu sem rolagem e sem cortes nas três resoluções solicitadas:** 1200 × 675 (grade 610 × 341), 1366 × 768 (694 × 388) e 1920 × 1080 (806 × 504). Capturas inspecionadas visualmente: cartões e Mila crescem proporcionalmente, textos legíveis, navegação visível, nome "Árvore" exibido.
+- **Navegador — feedbacks da flor por cliques reais em 1920 × 1080:** faltando só as pétalas → "Observe a parte de cima da flor. Alguns traços ainda estão faltando."; faltando só as folhas → "Observe as folhas..."; faltando pétalas e folhas → ambas nomeadas; figura completa com um traço extra → orientação de borracha; quatro traços aleatórios → orientação geral de recomeço; flor completa deslocada duas colunas → mensagem de deslocamento, sem aprovação. Entre os cenários, o desenho foi limpo com confirmação e os traços corretos foram preservados até a limpeza.
+- **Falhas da automação inicial:** dois timeouts do roteiro de teste (clique antes da hidratação; botão de confirmação dentro do diálogo modal). O roteiro foi corrigido; nenhuma correção na aplicação foi necessária.
+
+### Arquivos alterados
+
+`src/styles.css` (somente seleção), `src/routes/menu.tsx` (metadados), `src/data/figuras.ts` (somente o rótulo), `src/data/comparar.ts` (adição de `translacaoUniforme`), `src/data/comparar.test.ts`, `src/data/orientacao.ts` (reescrito), `src/data/orientacao.test.ts` (novo), `src/routes/desenhar.$figura.tsx` (feedback de deslocamento), `roadmap.md` e este relatório.
+
+A pendência da maçaneta do caminhão permanece fora do escopo.

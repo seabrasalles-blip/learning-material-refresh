@@ -44,3 +44,9 @@
 - [x] Keep fixed circles pre-drawn on the response grid, radius in cell units.
 - [x] Update tests and re-verify all twelve challenges in the browser at 1200 × 675.
 - [x] Demonstração de como desenhar na malha (tutorial, prática, dicas da primeira atividade)
+
+# DI adjustments (Nov 10, 2026)
+- [x] Make figure-selection screen responsive with clamp/minmax at 1200×675, 1366×768 and 1920×1080, preserving the 2:1 cell ratio.
+- [x] Rename "Figura em degraus" to "Árvore" (label and metadata only; internal id kept).
+- [x] Rebuild error feedback by semantic region distribution (situations A-D), verified in browser on the flower.
+- [x] Detect uniformly translated correct drawings and give differentiated feedback without approval; skip page-4 suggestion.
