@@ -352,6 +352,33 @@
 .practice-grid { width: min(100%, 260px); }
 .drawing-hint { font-weight: 800; font-size: 14px; padding: 4px 12px; border: 2px dashed var(--grid-preview); border-radius: 999px; background: var(--grid-paper); color: var(--grid-ink); margin: 0 auto 6px; width: fit-content; }
 
+/* Conceitos matemáticos: somente exemplo e síntese final. */
+.scale-concept-grids > div { height: 230px; gap: 8px; }
+.scale-concept-grids .side-measure { color: var(--button-green-ink); }
+.scale-concept-speech { font-weight: 700; line-height: 1.45; }
+.scale-concept-note { min-height: 44px; margin-top: 10px; font-size: 14px; line-height: 1.4; color: var(--button-cyan-ink); }
+.conclusion-synthesis { width: 100%; }
+.conclusion-synthesis .synthesis-copy { width: 620px; max-width: 100%; min-width: 0; }
+.conclusion-synthesis h1 { font-size: 36px; margin-bottom: 16px; }
+.conclusion-synthesis p { max-width: none; font-size: 19px; }
+.synthesis-next { margin-top: 24px; }
+.reflection-choices { display: grid; gap: 12px; margin-top: 22px; }
+.reflection-choices .cartoon-button { justify-content: flex-start; text-align: left; min-height: 60px; font-size: 18px; }
+.reflection-choices .cartoon-button > span:first-child { flex-shrink: 0; }
+.conclusion-synthesis .reflection-feedback { min-height: 84px; font-size: 17px; color: var(--activity-error); }
+@media (min-width: 768px) and (min-height: 900px) {
+ .conclusion-synthesis .mila { width: 240px; height: 430px; }
+ .conclusion-synthesis .conclusion-content { gap: 60px; }
+ .reflection-choices .cartoon-button { min-height: 72px; }
+}
+@media (max-width: 767px) {
+ .conclusion-synthesis .conclusion-content { gap: 14px; }
+ .conclusion-synthesis .mila { width: 80px; height: 145px; }
+ .conclusion-synthesis h1 { font-size: 26px; }
+ .conclusion-synthesis p, .reflection-choices .cartoon-button { font-size: 16px; }
+ .scale-concept-grids > div { height: 215px; }
+}
+
 /* Escolha ampliar/reduzir: composição ampliada e proporcional */
 .learning-choose { display: flex; flex-direction: column; justify-content: center; width: 100%; }
 .learning-choose .selection-heading { margin-bottom: clamp(10px, 2vh, 28px); }
