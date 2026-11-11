@@ -1,43 +1,60 @@
 import { describe, expect, it, vi } from "vitest";
-import { completeActivity, journeyComplete, nextMode, recordCompletion, resetSessionProgress } from "./session-progress";
-describe("main pedagogical journey", () => {
+import { completeActivity, figureProgress, journeyComplete, nextMode, recordCompletion, resetSessionProgress } from "./session-progress";
+
+describe("per-figure pedagogical journey", () => {
   it("does not conclude after just one reduction", () => {
-    expect(journeyComplete([{ figura: "peixe", modo: "reduzir" }])).toBe(false);
+    expect(journeyComplete([{ figura: "peixe", modo: "reduzir" }], "peixe")).toBe(false);
   });
   it("does not conclude after just one enlargement", () => {
-    expect(journeyComplete([{ figura: "casa", modo: "ampliar" }])).toBe(false);
+    expect(journeyComplete([{ figura: "casa", modo: "ampliar" }], "casa")).toBe(false);
   });
-  it("concludes with one success in each mode, even on different figures", () => {
-    expect(journeyComplete([{ figura: "peixe", modo: "reduzir" }, { figura: "casa", modo: "ampliar" }])).toBe(true);
+  it("never combines transformations from different figures", () => {
+    const history = [{ figura: "peixe", modo: "reduzir" as const }, { figura: "casa", modo: "ampliar" as const }];
+    expect(journeyComplete(history, "peixe")).toBe(false);
+    expect(journeyComplete(history, "casa")).toBe(false);
   });
-  it("repeating a mode cannot satisfy both transformations", () => {
+  it("completes fish enlargement-first only after fish reduction", () => {
+    const first = recordCompletion([], { figura: "peixe", modo: "ampliar" });
+    expect(nextMode(first, "peixe")).toBe("reduzir");
+    expect(journeyComplete(recordCompletion(first, { figura: "peixe", modo: "reduzir" }), "peixe")).toBe(true);
+  });
+  it("completes house reduction-first only after house enlargement", () => {
+    const first = recordCompletion([], { figura: "casa", modo: "reduzir" });
+    expect(nextMode(first, "casa")).toBe("ampliar");
+    expect(journeyComplete(recordCompletion(first, { figura: "casa", modo: "ampliar" }), "casa")).toBe(true);
+  });
+  it("deduplicates only the same figure and mode on replay", () => {
     const first = recordCompletion([], { figura: "peixe", modo: "reduzir" });
-    const repeated = recordCompletion(first, { figura: "flor", modo: "reduzir" });
-    expect(repeated).toEqual(first);
-    expect(journeyComplete(repeated)).toBe(false);
+    expect(recordCompletion(first, { figura: "peixe", modo: "reduzir" })).toEqual(first);
+    expect(recordCompletion(first, { figura: "flor", modo: "reduzir" })).toHaveLength(2);
   });
-  it("preserves the earlier success when completing another figure", () => {
-    const first = [{ figura: "peixe", modo: "reduzir" as const }];
-    expect(recordCompletion(first, { figura: "barco", modo: "ampliar" })).toEqual([...first, { figura: "barco", modo: "ampliar" }]);
+  it("scopes counts and invitations to the current figure", () => {
+    const history = [{ figura: "peixe", modo: "reduzir" as const }, { figura: "peixe", modo: "ampliar" as const }, { figura: "casa", modo: "ampliar" as const }];
+    expect(figureProgress(history, "peixe")).toHaveLength(2);
+    expect(figureProgress(history, "casa")).toEqual([{ figura: "casa", modo: "ampliar" }]);
+    expect(figureProgress(history, "flor")).toEqual([]);
+    expect(nextMode(history, "casa")).toBe("reduzir");
   });
-  it("invites the transformation not yet completed", () => {
-    expect(nextMode([{ figura: "flor", modo: "reduzir" }])).toBe("ampliar");
-    expect(nextMode([{ figura: "flor", modo: "ampliar" }])).toBe("reduzir");
+  it("preserves previous figures while completing another", () => {
+    const fish = [{ figura: "peixe", modo: "ampliar" as const }, { figura: "peixe", modo: "reduzir" as const }];
+    const history = recordCompletion(recordCompletion(fish, { figura: "casa", modo: "reduzir" }), { figura: "casa", modo: "ampliar" });
+    expect(figureProgress(history, "peixe")).toEqual(fish);
+    expect(journeyComplete(history, "casa")).toBe(true);
   });
-  it("replay resets both transformations in storage and allows a genuinely new journey", () => {
-    const storage = new Map<string, string>();
+  it("reads legacy valid pairs, preserves them on revisit and explicitly resets cleanly", () => {
+    const storage = new Map<string, string>([["mila-transformations", JSON.stringify([{ figura: "peixe", modo: "ampliar" }, { figura: "casa", modo: "reduzir" }])]]);
     vi.stubGlobal("window", {});
     vi.stubGlobal("sessionStorage", { getItem: (key: string) => storage.get(key) ?? null, setItem: (key: string, value: string) => storage.set(key, value) });
     try {
-      resetSessionProgress();
-      completeActivity({ figura: "peixe", modo: "reduzir" });
-      expect(journeyComplete(completeActivity({ figura: "casa", modo: "ampliar" }))).toBe(true);
+      const history = completeActivity({ figura: "peixe", modo: "reduzir" });
+      expect(journeyComplete(history, "peixe")).toBe(true);
+      expect(journeyComplete(history, "casa")).toBe(false);
+      expect(completeActivity({ figura: "peixe", modo: "ampliar" })).toEqual(history);
       expect(resetSessionProgress()).toEqual([]);
       expect(storage.get("mila-transformations")).toBe("[]");
       const first = completeActivity({ figura: "flor", modo: "reduzir" });
-      expect(first).toHaveLength(1);
-      expect(journeyComplete(first)).toBe(false);
-      expect(journeyComplete(completeActivity({ figura: "barco", modo: "ampliar" }))).toBe(true);
+      expect(first).toEqual([{ figura: "flor", modo: "reduzir" }]);
+      expect(journeyComplete(first, "flor")).toBe(false);
     } finally { resetSessionProgress(); vi.unstubAllGlobals(); }
   });
 });
