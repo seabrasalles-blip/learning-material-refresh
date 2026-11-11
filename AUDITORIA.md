@@ -149,3 +149,30 @@ A pendência da maçaneta do caminhão permanece fora do escopo.
 - Novos: `src/lib/concept-reflection.ts` e `src/lib/concept-reflection.test.ts` (regras exclusivamente de apresentação).
 - Documentação: `AGENTS.md`, `roadmap.md` e `AUDITORIA.md`.
 - Sem falhas nos testes executados. Celular, movimento reduzido e os controles do tutorial de cliques/prática não foram reexercitados nesta rodada; seus componentes e funcionamento permanecem intactos. A pendência anterior da maçaneta não faz parte desta intervenção.
+
+## Nova sequência por figura — 11 de novembro de 2026
+
+### Alterações
+
+- O histórico registra cada par figura/modalidade uma única vez; a conclusão e o indicador 0/1/2 consideram apenas a figura atual. Registros existentes da sessão continuam legíveis e acertos de figuras anteriores não são apagados.
+- A primeira escolha permanece livre. Após o primeiro acerto, CONTINUAR encaminha à transição da mesma figura, com convite nominal e botão AGORA VAMOS AMPLIAR!/REDUZIR!, abrindo diretamente a modalidade oposta.
+- Depois dos dois acertos da mesma figura, mantém-se a ordem reflexão → pergunta com tentativas → comemoração. A conclusão oferece ESCOLHER NOVA FIGURA e VOLTAR AO INÍCIO. O antigo JOGAR NOVAMENTE, que apagava todo o histórico, foi retirado dessa tela: refazer agora ocorre pela seleção da figura, preservando os registros.
+- VOLTAR, retorno ao menu e retorno à capa conservam o histórico. Uma figura já concluída pode ser redesenhada sem duplicar acertos; sua contagem permanece 2 de 2. A função de reinício explícito do armazenamento continua disponível e testada, sem ser acionada pela navegação.
+- Não foram alterados figuras, SVGs de desenho, gabaritos, círculos, escalas, ferramentas, feedbacks de erro, imagens ou tutoriais. A pergunta continua com estado local independente do histórico.
+
+### Resultados efetivos
+
+- **73 testes automatizados aprovados em nove arquivos**, incluindo nove testes de progresso por figura, seis de reflexão e todos os testes anteriores de geometria, ferramentas e apresentação.
+- **Compilação automática: build OK, 16:17:50 UTC.** A checagem intermediária identificou chamadas antigas nos testes de progresso; foram atualizadas para exigir a figura. Nenhuma compilação manual foi executada.
+- **1200×675, 1366×768 e 1920×1080:** capa → apresentação → peixe → ampliar → escala → tutorial → prática → desenho aprovado → convite para reduzir o peixe → redução aprovada → reflexão → resposta A com nova tentativa → B → comemoração → nova figura; depois casa → reduzir → ampliar → reflexão → nova figura. Os quatro desenhos de cada resolução foram feitos por cliques reais, totalizando doze atividades aprovadas.
+- Em cada resolução, também redesenhei o peixe ampliado já concluído, totalizando **15 desenhos aprovados** nesta rodada. O histórico permaneceu exatamente igual, sem duplicatas. Retornar à capa e iniciar a flor mostrou 0 de 2, conservando os quatro acertos do peixe e da casa.
+- Acesso direto à conclusão após uma única modalidade bloqueado nas duas figuras; retorno ao menu e escolha novamente do peixe conservou 1 de 2. Depois da prática, a segunda modalidade mostrou apenas a demonstração matemática; modalidades já vistas não repetiram automaticamente o exemplo.
+- Teste complementar em 1280×1800 com **peixe ampliado e casa reduzida**, ambos por desenho real: nenhuma figura liberou a reflexão; ambas mostraram 1 de 2, inclusive após recarregar. Os dois registros permaneceram na sessão.
+- Telas percorridas e diálogos sem rolagem de página, transbordamento ou controles fora da tela nas três resoluções solicitadas. Capturas de transição, reflexão e comemoração inspecionadas visualmente. Nenhum erro de execução observado nos percursos finais.
+- O teste complementar inicialmente executou também o roteiro importado, causando espera excessiva; corrigi a proteção de execução do roteiro e a repetição complementar passou. Não houve alteração da aplicação por essa falha de automação.
+
+### Arquivos e limites
+
+- Código: `src/lib/session-progress.ts`, `src/lib/session-progress.test.ts`, `src/components/LearningScreen.tsx`, `src/components/JourneyTransition.tsx`, `src/routes/escolher.$figura.tsx`, `src/routes/desenhar.$figura.tsx`, `src/routes/conclusao.tsx`.
+- Documentação: `AGENTS.md`, `roadmap.md`, `AUDITORIA.md` e atualização da regra pedagógica permanente.
+- As seis figuras e os dois modos continuam cobertos pelos testes matemáticos; nesta rodada, os desenhos completos no navegador foram peixe e casa, não as outras quatro figuras. Celular, toque, movimento reduzido e todos os botões internos do tutorial não foram reexercitados. A pendência antiga da maçaneta do caminhão continua dependendo de referência mais precisa ou autorização de aproximação, fora deste ajuste.

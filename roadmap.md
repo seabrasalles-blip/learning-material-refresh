@@ -1,5 +1,9 @@
 # Pedagogical refactor
 
+# Per-figure pedagogical sequence
+- [x] Scope session progress, transition, conclusion and indicator to the selected figure; preserve previous figures and tutorials.
+- [x] Test fish enlargement-first and house reduction-first, guards, history, retries and restart at all three requested resolutions; update AUDITORIA.md (73 tests passed; 15 drawings approved; mixed-figure guards verified separately).
+
 # Proportionality and similar figures
 - [x] Highlight corresponding square sides in the existing scale example with exact 2 and ½ ratios.
 - [x] Add reflection, retryable A/B/C question and gated celebration without changing transformation progress.
