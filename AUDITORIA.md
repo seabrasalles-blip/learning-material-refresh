@@ -1,5 +1,21 @@
 # Auditoria — referências Flash e percurso com Mila
 
+## Banco e sequência obrigatória das perguntas — 11 de novembro de 2026
+
+- Banco de sete perguntas: a original permanece com enunciado/alternativas e resposta B; seis novas perguntas sobre dobro, metade, fator comum, células maiores, lados proporcionais e semelhança. Todas têm três alternativas, explicações para erros e para o acerto; novas tentativas permanecem disponíveis até acertar.
+- Atribuição pela ordem em que cada figura completa seus dois modos, não pela identidade da figura ou ordem de visita à reflexão. A primeira recebe sempre a original; as seguintes sorteiam apenas perguntas adicionais ainda não atribuídas. Uma modalidade, repetições da mesma modalidade e modos de figuras diferentes não consomem perguntas.
+- `mila-reflection-v1` registra atribuições por figura, apresentação, etapa, última alternativa e estado de tentativa. Voltar/recarregar conserva a pergunta e a etapa, incluindo comemoração já liberada; refazer a figura não sorteia outra pergunta. Sessões antigas sem esse histórico usam a ordem dos acertos já registrados para atribuir a original à primeira figura concluída.
+- `resetSessionProgress()` também limpa o histórico de perguntas. A navegação normal, inclusive retorno à capa, não reinicia o percurso; nenhum botão novo foi acrescentado. O reinício integral é coberto pelo teste da função existente, não por uma ação disponível na interface atual.
+- **Limite do conjunto atual:** há seis figuras; uma sessão que conclui todas apresenta a original e cinco das seis adicionais. A sétima pergunta permanece disponível no banco, sem forçar outra pergunta ao refazer uma figura. O esgotamento das sete foi testado com sete identidades de figura simuladas, sem adicionar figuras reais.
+
+### Resultados efetivamente obtidos
+
+- `bunx vitest run`: **95 testes aprovados em dez arquivos**, incluindo 22 novos testes. A original foi testada com cada uma das seis figuras e cada modalidade inicial (12 casos). Sorteio sem repetição, independente da identidade, conclusão em dois modos, retorno/replay, restauração de erro/acerto, tentativas em todas as perguntas, isolamento do progresso e reinício integral também foram testados.
+- Navegador em **1200×675, 1366×768 e 1920×1080**: seis figuras, dois modos por figura e um replay do peixe por resolução — **39 desenhos aprovados por cliques reais**. Pergunta original primeiro em todas as sessões; cinco adicionais únicas a seguir. Erro com feedback, recarregamento com erro preservado, acerto, recarregamento da comemoração e ESCOLHER NOVA FIGURA conferidos para todas as seis figuras. A primeira modalidade não alocou pergunta; replay não consumiu pergunta nova.
+- Nenhuma rolagem horizontal/vertical ou erro de execução nos percursos finais. Capturas das perguntas com erro inspecionadas nas três resoluções. A compilação automática ficou **build OK** após corrigir a ausência de conteúdo obrigatório no estado inicial da conclusão; não foi executada compilação manual.
+- Falhas intermediárias da automação: clique antes da tela estar pronta e uma edição incorreta do roteiro de teste; roteiro corrigido para aguardar carregamento/navegação, execução final completa sem falhas.
+- Código alterado: `src/routes/conclusao.tsx`, `src/lib/concept-reflection.ts`, `src/lib/session-progress.ts`; novos `src/lib/reflection-questions.ts`, `src/lib/reflection-session.ts` e seu teste. Documentação: `AGENTS.md`, `roadmap.md`, este relatório e memória pedagógica. Malhas, desenhos, figuras, gabaritos, validação, assets e tutoriais preservados. Celular, toque e controles internos do tutorial não foram reexercitados nesta rodada; a pendência antiga da maçaneta continua fora do escopo.
+
 ## Comparação visual e alterações
 
 As seis PNGs de `referencias_flash_malha_6_figuras.zip` foram abertas e comparadas com os dados anteriores. As imagens são referências, não são exibidas no jogo.

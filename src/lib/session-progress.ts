@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { Modo } from "@/data/figuras";
+import { resetReflectionQuestions, syncReflectionQuestions } from "./reflection-session";
 
 export type Completion = { figura: string; modo: Modo };
 const KEY = "mila-transformations";
@@ -37,6 +38,7 @@ export function completeActivity(completion: Completion) {
   snapshot = recordCompletion(read(), completion);
   serialized = JSON.stringify(snapshot);
   try { sessionStorage.setItem(KEY, serialized); } catch { /* No persistent storage required. */ }
+  syncReflectionQuestions(snapshot);
   listeners.forEach(listener => listener());
   return snapshot;
 }
@@ -44,6 +46,7 @@ export function resetSessionProgress() {
   snapshot = EMPTY;
   serialized = "[]";
   try { sessionStorage.setItem(KEY, serialized); } catch { /* Reset also works in memory. */ }
+  resetReflectionQuestions();
   listeners.forEach(listener => listener());
   return snapshot;
 }
@@ -54,5 +57,5 @@ function subscribe(listener: () => void) {
 export function useSessionProgress(figura?: string) {
   const history = useSyncExternalStore(subscribe, read, () => EMPTY);
   const progress = figureProgress(history, figura);
-  return { progress, complete: figura ? journeyComplete(history, figura) : false, next: figura ? nextMode(history, figura) : "reduzir" as Modo };
+  return { history, progress, complete: figura ? journeyComplete(history, figura) : false, next: figura ? nextMode(history, figura) : "reduzir" as Modo };
 }

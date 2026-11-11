@@ -1,5 +1,9 @@
 # Pedagogical refactor
 
+# Reflection question sequence
+- [x] Add seven questions with the original first, session-stable random assignments, retries and explicit reset.
+- [x] Test sequence rules and the real drawing-to-reflection flow; 95 tests passed, 39 real drawings approved across three resolutions; results in AUDITORIA.md.
+
 # Per-figure pedagogical sequence
 - [x] Scope session progress, transition, conclusion and indicator to the selected figure; preserve previous figures and tutorials.
 - [x] Test fish enlargement-first and house reduction-first, guards, history, retries and restart at all three requested resolutions; update AUDITORIA.md (73 tests passed; 15 drawings approved; mixed-figure guards verified separately).

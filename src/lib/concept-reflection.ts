@@ -6,8 +6,8 @@ export type ReflectionChoice = "A" | "B" | "C";
 export type ReflectionState = { stage: ReflectionStage; retry: boolean };
 export const INITIAL_REFLECTION: ReflectionState = { stage: "reflection", retry: false };
 
-export function answerReflection(choice: ReflectionChoice): ReflectionState {
-  return choice === "B"
+export function answerReflection(choice: ReflectionChoice, correct: ReflectionChoice = "B"): ReflectionState {
+  return choice === correct
     ? { stage: "celebration", retry: false }
     : { stage: "question", retry: true };
 }
