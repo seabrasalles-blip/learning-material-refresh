@@ -12,3 +12,4 @@
 - Reset the shared session progress explicitly for journey replay; figure exploration must never reset it.
 - Erase by nearest student-segment index (pointer distance in screen pixels or keyboard selection), keeping supplied circles outside hit testing; coverage differences feed a separate contextual-guidance module so geometry and pedagogical copy stay independent.
 - Version per-mode scale viewing separately from shared tool-tutorial completion, so legacy sessions receive new instruction; explicit example review can replay all three steps. Practice uses local DrawingGrid state and never writes activity strokes or progress; hints remain separate presentation state.
+- Keep conceptual conclusion stages and answer evaluation in presentation-only state, separate from session transformation progress, so reflection retries cannot modify drawings or earned completions; example side measures never feed activity geometry.

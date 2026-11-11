@@ -123,3 +123,29 @@ A pendência anterior da maçaneta do caminhão permanece fora do escopo desta r
 `src/styles.css` (somente seleção), `src/routes/menu.tsx` (metadados), `src/data/figuras.ts` (somente o rótulo), `src/data/comparar.ts` (adição de `translacaoUniforme`), `src/data/comparar.test.ts`, `src/data/orientacao.ts` (reescrito), `src/data/orientacao.test.ts` (novo), `src/routes/desenhar.$figura.tsx` (feedback de deslocamento), `roadmap.md` e este relatório.
 
 A pendência da maçaneta do caminhão permanece fora do escopo.
+
+## Proporcionalidade e semelhança — 11 de novembro de 2026
+
+### Alterações pontuais
+
+- Na etapa de escala existente, os lados superiores correspondentes são destacados em verde contrastante, com a grade visível. O Modelo permanece completo desde o início; apenas a Nova malha é traçada. As duas figuras continuam ocupando dois quadradinhos por lado, com células 13/26 ou 26/13: fatores exatos 2 e ½, sem modificar a geometria de atividades.
+- As falas solicitadas sobre medidas proporcionais substituem a explicação anterior, sem acumular textos. A frase de sistematização aparece ao terminar a animação. As medidas são relativas ao lado original (1 medida → 2 medidas ou ½ medida), não medidas de área.
+- A conclusão usa três momentos na mesma página: reflexão sobre figuras semelhantes → pergunta com alternativas A/B/C → comemoração. A e C mostram o feedback solicitado e permitem nova tentativa; B libera a mensagem de acerto, comemoração e os três botões existentes. VOLTAR, cabeçalho e indicador permanecem presentes.
+- O estado da pergunta é local, sem armazenamento ou acesso ao progresso. Não há pontuação nova nem terceira transformação. A guarda de conclusão continua exigindo os dois modos; ferramentas, prática, tutorial de cliques, figuras, círculos, escalas e validação não foram alterados.
+
+### Resultados efetivamente obtidos
+
+- `bunx vitest run`: **71 testes aprovados em nove arquivos**, sem falhas. Os seis novos testes cobrem início da reflexão, tentativas A/C, liberação por B e medidas exatas de ampliar/reduzir. Os 65 testes anteriores continuam aprovados.
+- Compilação automática: **build OK**, registro de 15:12:10 UTC. Não foi executada compilação manual, conforme as regras da plataforma.
+- Navegador em **1200×675, 1366×768 e 1920×1080**: percurso capa → apresentação → peixe → reduzir → exemplo → desenho correto por cliques reais → transição → escolha → ampliar → exemplo → desenho correto → reflexão → pergunta → comemoração. Foram aprovadas seis atividades reais (um peixe em cada modo por resolução); não se afirma ter repetido as outras cinco figuras.
+- Em cada resolução: Modelo completo antes de REPRODUZIR; PAUSAR mantém o mesmo quadro; REPRODUZIR retoma; ao final, lados SVG medidos em 52/26 na redução e 26/52 na ampliação, com traçado concluído. A etapa de escala não apresentou rolagem interna.
+- Em cada resolução: alternativas A e C acionadas, feedback de erro visível, nova tentativa disponível; B libera comemoração e botões. O conteúdo de `mila-transformations` foi comparado antes/depois das respostas e permaneceu idêntico.
+- NOVA FIGURA conservou 2 de 2; JOGAR NOVAMENTE zerou o progresso e abriu desenho vazio. A conclusão antecipada após reiniciar continuou bloqueada. Nenhum erro de execução foi capturado.
+- Páginas e diálogos dos novos momentos sem transbordamento horizontal ou vertical nas três resoluções; capturas de escala, reflexão, pergunta com erro e comemoração inspecionadas visualmente.
+
+### Arquivos modificados e limites
+
+- `src/components/ScaleDemonstration.tsx`, `src/routes/conclusao.tsx`, `src/styles.css`.
+- Novos: `src/lib/concept-reflection.ts` e `src/lib/concept-reflection.test.ts` (regras exclusivamente de apresentação).
+- Documentação: `AGENTS.md`, `roadmap.md` e `AUDITORIA.md`.
+- Sem falhas nos testes executados. Celular, movimento reduzido e os controles do tutorial de cliques/prática não foram reexercitados nesta rodada; seus componentes e funcionamento permanecem intactos. A pendência anterior da maçaneta não faz parte desta intervenção.

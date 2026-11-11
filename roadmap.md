@@ -1,5 +1,10 @@
 # Pedagogical refactor
 
+# Proportionality and similar figures
+- [x] Highlight corresponding square sides in the existing scale example with exact 2 and ½ ratios.
+- [x] Add reflection, retryable A/B/C question and gated celebration without changing transformation progress.
+- [x] Run all tests and verify both modes and conclusion controls at 1200×675, 1366×768 and 1920×1080; document actual results (71 tests passed; six real fish drawings approved; no scrolling or runtime errors).
+
 # Mila introduction spacing
 - [x] Enlarge the supplied Mila pose and integrate the wider text and CONTINUAR; browser-verified at 1200×675 and 1366×768 without scrolling or clipping, with both navigation buttons working and no runtime errors (also checked 844×607 and 390×844).
 
