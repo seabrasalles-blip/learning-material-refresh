@@ -42,7 +42,7 @@ function Conclusion() {
       <p>Você concluiu as duas transformações da figura {FIGURAS[figura].nome}!</p><p>Agora você já sabe ampliar e reduzir figuras usando a malha!</p>
     </>}
    </div></div>
-   {reflection.stage === "celebration" && <div className="conclusion-actions"><CartoonButton tone="pink" onClick={() => navigate({ to: "/menu" })}>ESCOLHER NOVA FIGURA <ArrowRight size={18} /></CartoonButton><CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> VOLTAR AO INÍCIO</CartoonButton></div>}
+   {reflection.stage === "celebration" && <div className="conclusion-actions"><CartoonButton tone="pink" onClick={() => navigate({ to: "/menu", search: { concluida: figura } })}>ESCOLHER NOVA FIGURA <ArrowRight size={18} /></CartoonButton><CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> VOLTAR AO INÍCIO</CartoonButton></div>}
   </div>
  </LearningScreen>;
 }

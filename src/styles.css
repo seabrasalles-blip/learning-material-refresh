@@ -164,7 +164,8 @@
 .mila-aside .mila { width: clamp(140px, 12vw, 205px); height: auto; aspect-ratio: 7 / 13; margin: auto; }
 .mila-aside p { font-size: clamp(15px, 1.15vw, 19px); font-weight: 700; line-height: 1.5; margin-top: 12px; }
 .figure-options { display: grid; grid-template-columns: repeat(3, minmax(0, clamp(178px, 16vw, 262px))); gap: clamp(12px, 1.4vw, 24px); }
-.figure-option { flex-direction: column; gap: 10px; height: clamp(160px, 24vh, 240px); background: var(--mila-surface); border-color: var(--mila-border); color: var(--activity-text); box-shadow: 0 4px 0 var(--mila-border); padding: 12px; font-size: clamp(17px, 1.3vw, 22px); }
+.figure-option { position: relative; flex-direction: column; gap: 10px; height: clamp(160px, 24vh, 240px); background: var(--mila-surface); border-color: var(--mila-border); color: var(--activity-text); box-shadow: 0 4px 0 var(--mila-border); padding: 12px; font-size: clamp(17px, 1.3vw, 22px); }
+.figure-option .figure-completion-check { position: absolute; top: 3px; right: 0; width: 22px; height: 22px; color: var(--activity-success); background: var(--grid-paper); border-radius: 50%; pointer-events: none; }
 .figure-option:hover { border-color: var(--mila-highlight); transform: translateY(-2px); }
 .figure-option svg { max-height: clamp(112px, 16vh, 172px); border: 0 !important; }
 .transform-layout { display: flex; align-items: center; justify-content: center; gap: 60px; }

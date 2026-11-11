@@ -76,5 +76,6 @@ export function submitReflectionAnswer(figura: string, choice: ReflectionChoice)
 export function resetReflectionQuestions() { return write(EMPTY); }
 function subscribe(listener: () => void) { listeners.add(listener); return () => { listeners.delete(listener); }; }
 export function useReflectionSession(figura: string) {
-  return useSyncExternalStore(subscribe, read, () => EMPTY).find(entry => entry.figura === figura);
+  return useReflectionHistory().find(entry => entry.figura === figura);
 }
+export function useReflectionHistory() { return useSyncExternalStore(subscribe, read, () => EMPTY); }

@@ -1,5 +1,9 @@
 # Pedagogical refactor
 
+# Figure completion checks
+- [x] Derive menu checks from both transformations and correct reflection; add one-visit Mila message without changing drawings.
+- [x] Test incomplete, complete, independent, replay, reload and reset states at the three requested resolutions; 104 tests and 15 real drawings passed; results and reset limitation in AUDITORIA.md.
+
 # Reflection question sequence
 - [x] Add seven questions with the original first, session-stable random assignments, retries and explicit reset.
 - [x] Test sequence rules and the real drawing-to-reflection flow; 95 tests passed, 39 real drawings approved across three resolutions; results in AUDITORIA.md.

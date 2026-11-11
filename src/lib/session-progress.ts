@@ -1,6 +1,6 @@
 import { useSyncExternalStore } from "react";
 import type { Modo } from "@/data/figuras";
-import { resetReflectionQuestions, syncReflectionQuestions } from "./reflection-session";
+import { resetReflectionQuestions, syncReflectionQuestions, type QuestionHistory } from "./reflection-session";
 
 export type Completion = { figura: string; modo: Modo };
 const KEY = "mila-transformations";
@@ -18,6 +18,9 @@ export function figureProgress(progress: Completion[], figura?: string): Complet
 export function journeyComplete(progress: Completion[], figura: string) {
   const current = figureProgress(progress, figura);
   return current.some(p => p.modo === "reduzir") && current.some(p => p.modo === "ampliar");
+}
+export function figureFullyComplete(progress: Completion[], reflections: QuestionHistory, figura: string) {
+  return journeyComplete(progress, figura) && reflections.some(entry => entry.figura === figura && entry.stage === "celebration" && !entry.retry);
 }
 export function nextMode(progress: Completion[], figura: string): Modo {
   return figureProgress(progress, figura).some(p => p.modo === "reduzir") ? "ampliar" : "reduzir";
