@@ -9,13 +9,17 @@ let serialized = "";
 const listeners = new Set<() => void>();
 
 export function recordCompletion(progress: Completion[], completion: Completion): Completion[] {
-  return progress.some(p => p.modo === completion.modo) ? progress : [...progress, completion];
+  return progress.some(p => p.figura === completion.figura && p.modo === completion.modo) ? progress : [...progress, completion];
 }
-export function journeyComplete(progress: Completion[]) {
-  return progress.some(p => p.modo === "reduzir") && progress.some(p => p.modo === "ampliar");
+export function figureProgress(progress: Completion[], figura?: string): Completion[] {
+  return figura ? progress.filter(p => p.figura === figura) : EMPTY;
 }
-export function nextMode(progress: Completion[]): Modo {
-  return progress.some(p => p.modo === "reduzir") ? "ampliar" : "reduzir";
+export function journeyComplete(progress: Completion[], figura: string) {
+  const current = figureProgress(progress, figura);
+  return current.some(p => p.modo === "reduzir") && current.some(p => p.modo === "ampliar");
+}
+export function nextMode(progress: Completion[], figura: string): Modo {
+  return figureProgress(progress, figura).some(p => p.modo === "reduzir") ? "ampliar" : "reduzir";
 }
 function read() {
   if (typeof window === "undefined") return EMPTY;
@@ -47,7 +51,8 @@ function subscribe(listener: () => void) {
   listeners.add(listener);
   return () => { listeners.delete(listener); };
 }
-export function useSessionProgress() {
-  const progress = useSyncExternalStore(subscribe, read, () => EMPTY);
-  return { progress, complete: journeyComplete(progress), next: nextMode(progress) };
+export function useSessionProgress(figura?: string) {
+  const history = useSyncExternalStore(subscribe, read, () => EMPTY);
+  const progress = figureProgress(history, figura);
+  return { progress, complete: figura ? journeyComplete(history, figura) : false, next: figura ? nextMode(history, figura) : "reduzir" as Modo };
 }

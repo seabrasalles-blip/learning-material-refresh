@@ -62,7 +62,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
     markDemonstrationSeen(modo);
   };
   const changed = () => { setPending(null); setResultado(null); setDeslocado(false); };
-  return <LearningScreen activity step={4} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setDeslocado(!result.completo && translacaoUniforme(segmentos, desafio.resposta.segmentos)); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
+  return <LearningScreen activity step={4} figura={id} onBack={() => navigate({ to: "/escolher/$figura", params: { figura: id } })} footer={<><CartoonButton onClick={() => { setPending(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton><CartoonButton tone="pink" onClick={() => { setPending(null); const result = comparar(segmentos, desafio.resposta.segmentos); if (result.completo) completeActivity({ figura: id, modo }); setDeslocado(!result.completo && translacaoUniforme(segmentos, desafio.resposta.segmentos)); setResultado(result); }}>VERIFICAR <Check size={20} /></CartoonButton></>}>
     <div className="activity-main">
       <header className="activity-header">
         <h1 className="font-extrabold text-xl">{figura.nome} — {modo === "ampliar" ? "AMPLIAR" : "REDUZIR"}</h1>
@@ -88,8 +88,7 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
         <Mila pose={resultado.completo ? "celebrating" : "encouraging"} className="feedback-mila" />
         <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : deslocado ? "A forma do seu desenho está certa, mas ele está em outra posição da malha. Use os pontos correspondentes das duas malhas para desenhá-lo no lugar certo." : orientacao(figura, resultado)}</p>
         <div className="example-controls">{resultado.completo ? <>
-          <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo })) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
-          <CartoonButton onClick={() => navigate({ to: "/menu" })}>ESCOLHER OUTRA FIGURA</CartoonButton>
+          <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo }), id) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
           <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
         </> : <>
           <CartoonButton tone="pink" onClick={() => setResultado(null)}>TENTAR NOVAMENTE</CartoonButton>

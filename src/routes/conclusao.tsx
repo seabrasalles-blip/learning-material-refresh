@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, RotateCcw, Home } from "lucide-react";
+import { ArrowRight, Home } from "lucide-react";
 import { LearningScreen } from "@/components/LearningScreen";
 import { Mila } from "@/components/Mila";
 import { CartoonButton } from "@/components/CartoonButton";
 import { FIGURAS, type Modo } from "@/data/figuras";
 import { pageMeta } from "@/lib/page-meta";
-import { resetSessionProgress, useSessionProgress } from "@/lib/session-progress";
+import { useSessionProgress } from "@/lib/session-progress";
 import { JourneyTransition } from "@/components/JourneyTransition";
 import { answerReflection, INITIAL_REFLECTION, type ReflectionChoice } from "@/lib/concept-reflection";
 
@@ -20,11 +20,11 @@ export const Route = createFileRoute("/conclusao")({
  head: () => pageMeta("Figuras semelhantes — Parabéns!", "Reflita com Mila sobre proporcionalidade e figuras semelhantes após ampliar e reduzir."), component: Conclusion,
 });
 function Conclusion() {
- const navigate = useNavigate(); const { figura, modo } = Route.useSearch();
- const { complete } = useSessionProgress();
+ const navigate = useNavigate(); const { figura } = Route.useSearch();
+ const { complete } = useSessionProgress(figura);
  const [reflection, setReflection] = useState(INITIAL_REFLECTION);
  if (!complete) return <JourneyTransition figura={figura} />;
- return <LearningScreen step={4} onBack={() => navigate({ to: "/menu" })}>
+ return <LearningScreen step={4} figura={figura} onBack={() => navigate({ to: "/menu" })}>
   <div className="conclusion-synthesis">
    <div className="conclusion-content"><Mila pose={reflection.stage === "celebration" ? "celebrating" : reflection.retry ? "encouraging" : "explaining"} /><div className="synthesis-copy">
     {reflection.stage === "reflection" && <>
@@ -41,10 +41,10 @@ function Conclusion() {
     {reflection.stage === "celebration" && <>
      <span className="eyebrow">VOCÊ CONSEGUIU!</span><h1>Parabéns!</h1>
      <p role="status">Muito bem! As medidas dos lados mudam na mesma proporção e a forma é preservada. Essa é uma característica das figuras semelhantes!</p>
-     <p>Você concluiu um desafio de ampliar e um de reduzir!</p><p>Agora você já sabe ampliar e reduzir figuras usando a malha!</p>
+      <p>Você concluiu as duas transformações da figura {FIGURAS[figura].nome}!</p><p>Agora você já sabe ampliar e reduzir figuras usando a malha!</p>
     </>}
    </div></div>
-   {reflection.stage === "celebration" && <div className="conclusion-actions"><CartoonButton tone="pink" onClick={() => navigate({ to: "/menu" })}>NOVA FIGURA <ArrowRight size={18} /></CartoonButton><CartoonButton onClick={() => { resetSessionProgress(); navigate({ to: "/desenhar/$figura", params: { figura }, search: { modo } }); }}><RotateCcw size={18} /> JOGAR NOVAMENTE</CartoonButton><CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> VOLTAR AO INÍCIO</CartoonButton></div>}
+   {reflection.stage === "celebration" && <div className="conclusion-actions"><CartoonButton tone="pink" onClick={() => navigate({ to: "/menu" })}>ESCOLHER NOVA FIGURA <ArrowRight size={18} /></CartoonButton><CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> VOLTAR AO INÍCIO</CartoonButton></div>}
   </div>
  </LearningScreen>;
 }
