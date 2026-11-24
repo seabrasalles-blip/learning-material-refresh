@@ -204,3 +204,16 @@ A pendência da maçaneta do caminhão permanece fora do escopo.
 - **Compilação automática: build OK, 20:49:04 UTC.** Nenhuma compilação manual executada. Figuras, gabaritos, SVGs, escalas, ferramentas, animações, assets e feedbacks preservados.
 - Arquivos modificados: src/routes/menu.tsx, src/routes/conclusao.tsx, src/lib/session-progress.ts, src/lib/reflection-session.ts, src/styles.css; novo teste src/lib/figure-completion.test.ts; documentação AGENTS.md, roadmap.md e AUDITORIA.md.
 - Limites: desenho completo no navegador reexercitado apenas para peixe e flor nesta rodada; demais figuras cobertas pelos testes existentes. Celular, toque e movimento reduzido não reexercitados. A pendência anterior da maçaneta permanece fora deste pedido.
+
+## Inversão dos botões no feedback de acerto — 24/11/2026
+
+- Na janela "Muito bem!" de `src/routes/desenhar.$figura.tsx` a ordem do JSX foi invertida: **MENU INICIAL** (verde, ícone de casa, `tone="green"`, retorna a `/`) passou a ser o primeiro botão e **CONTINUAR** (rosa, ícone de seta, `tone="pink"`, avança para `/transicao` ou `/conclusao`) o segundo. A inversão é na estrutura JSX, não em CSS, então a sequência de tabulação acompanha a ordem visual.
+- Busca por `MENU INICIAL` no código-fonte localizou essa combinação de botões apenas nesta janela; as demais telas (transição, conclusão, reflexão, exemplo) não apresentam o par CONTINUAR + MENU INICIAL e não foram alteradas.
+- **bunx vitest run: 104 testes aprovados em 11 arquivos**, mesmo total da rodada anterior; nenhum teste foi alterado.
+- **1200×675, 1366×768 e 1920×1080:** a casa em modo reduzir foi desenhada por cliques reais nos 18 trechos do gabarito e aprovada por VERIFICAR. Em cada resolução os dois botões ficaram **centralizados na base da janela**, com MENU INICIAL à esquerda e CONTINUAR à direita, ambos **inteiramente dentro da área visível** (por exemplo, em 1200×675: MENU de x=421 a 602, CONTINUAR de x=612 a 779, base em y=543). Classes `cartoon-green` e `cartoon-pink` confirmadas nos botões corretos.
+- **Teclado:** ao abrir a janela o foco inicial cai em MENU INICIAL e a primeira tecla TAB move para CONTINUAR, repetindo o ciclo — a ordem de foco coincide com a ordem visual.
+- **Funções preservadas:** MENU INICIAL levou a `http://localhost:8080/`; CONTINUAR levou a `http://localhost:8080/transicao?figura=casa&modo=reduzir`. Nenhum erro de execução nas três resoluções.
+- **Compilação automática: build OK, 10:47:40 UTC.** Nenhuma compilação manual executada.
+- A automação falhou na primeira tentativa por um motivo do próprio roteiro: o parágrafo de dica de desenho muda de altura e desloca a malha entre cliques, invalidando coordenadas calculadas uma única vez. O roteiro passou a recalcular a posição da malha a cada clique; a aplicação não foi alterada por isso.
+- Arquivos modificados: `src/routes/desenhar.$figura.tsx` (apenas a ordem dos dois botões); documentação `roadmap.md` e `AUDITORIA.md`.
+- Limites: apenas a casa em reduzir foi desenhada no navegador nesta rodada; a janela de acerto é a mesma para as demais figuras e modos, mas isso não foi reexercitado. A tela de conclusão mantém seus próprios botões (ESCOLHER NOVA FIGURA e VOLTAR AO INÍCIO), fora deste pedido.

@@ -1,5 +1,9 @@
 # Pedagogical refactor
 
+# Success feedback button order
+- [x] Swap the two buttons in the "Muito bem!" dialog so MENU INICIAL (green, home icon) comes first and CONTINUAR (pink, arrow icon) second, in JSX order.
+- [x] Verify left/right order, colors, functions, keyboard focus order and full visibility at 1200×675, 1366×768 and 1920×1080; 104 tests and build OK; results in AUDITORIA.md.
+
 # Figure completion checks
 - [x] Derive menu checks from both transformations and correct reflection; add one-visit Mila message without changing drawings.
 - [x] Test incomplete, complete, independent, replay, reload and reset states at the three requested resolutions; 104 tests and 15 real drawings passed; results and reset limitation in AUDITORIA.md.

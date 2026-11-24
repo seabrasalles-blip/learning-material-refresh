@@ -88,8 +88,8 @@ function Atividade({ id, modo }: { id: string; modo: Modo }) {
         <Mila pose={resultado.completo ? "celebrating" : "encouraging"} className="feedback-mila" />
         <p className="feedback-message">{resultado.completo ? "Você conseguiu!" : deslocado ? "A forma do seu desenho está certa, mas ele está em outra posição da malha. Use os pontos correspondentes das duas malhas para desenhá-lo no lugar certo." : orientacao(figura, resultado)}</p>
         <div className="example-controls">{resultado.completo ? <>
-          <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo }), id) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
           <CartoonButton tone="green" onClick={() => navigate({ to: "/" })}><Home size={18} /> MENU INICIAL</CartoonButton>
+          <CartoonButton tone="pink" onClick={() => navigate({ to: journeyComplete(completeActivity({ figura: id, modo }), id) ? "/conclusao" : "/transicao", search: { figura: id, modo } })}>CONTINUAR <ArrowRight size={18} /></CartoonButton>
         </> : <>
           <CartoonButton tone="pink" onClick={() => setResultado(null)}>TENTAR NOVAMENTE</CartoonButton>
           <CartoonButton onClick={() => { setResultado(null); setIncludeDrawingTutorial(true); setExample(true); }}><Play size={18} /> VER EXEMPLO</CartoonButton>
